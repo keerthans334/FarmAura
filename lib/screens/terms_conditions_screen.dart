@@ -12,15 +12,11 @@ class TermsConditionsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-<<<<<<< HEAD
         if (Navigator.canPop(context)) {
           context.pop();
         } else {
           context.go('/settings');
         }
-=======
-        context.go('/settings');
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
         return false;
       },
       child: Scaffold(
@@ -32,11 +28,7 @@ class TermsConditionsScreen extends StatelessWidget {
                 showBack: true,
                 showProfile: false,
                 appState: appState,
-<<<<<<< HEAD
                 onBack: () => Navigator.canPop(context) ? context.pop() : context.go('/settings'),
-=======
-                onBack: () => context.go('/settings'),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
               ),
               Expanded(
                 child: ListView(

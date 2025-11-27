@@ -9,11 +9,7 @@ import '../widgets/app_header.dart';
 import '../widgets/app_footer.dart';
 import '../widgets/floating_ivr.dart';
 
-<<<<<<< HEAD
 import 'package:farmaura/l10n/app_localizations.dart';
-
-=======
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
 class WeatherDetailsScreen extends StatefulWidget {
   const WeatherDetailsScreen({super.key, required this.appState});
   final AppState appState;
@@ -28,7 +24,6 @@ class _WeatherDetailsScreenState extends State<WeatherDetailsScreen> {
   @override
   void initState() {
     super.initState();
-<<<<<<< HEAD
     final loc = widget.appState.location;
     if (loc['lat'] != null && loc['lon'] != null) {
       _weatherFuture = WeatherApiService().getWeatherByCoordinates(loc['lat'], loc['lon']);
@@ -36,9 +31,6 @@ class _WeatherDetailsScreenState extends State<WeatherDetailsScreen> {
       // Fallback if no location (though dashboard should have handled this)
       _weatherFuture = WeatherApiService().getWeatherByCoordinates(23.3441, 85.3096); // Default Ranchi
     }
-=======
-    _weatherFuture = WeatherApiService().fetchWeather('Ranchi');
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
   }
 
   String _formatTemp(num temp) => '${temp.round()}\u00B0C';
@@ -46,13 +38,8 @@ class _WeatherDetailsScreenState extends State<WeatherDetailsScreen> {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final target = DateTime(date.year, date.month, date.day);
-<<<<<<< HEAD
     if (target == today) return AppLocalizations.of(context)!.today;
     if (target == today.add(const Duration(days: 1))) return AppLocalizations.of(context)!.tomorrow;
-=======
-    if (target == today) return 'Today';
-    if (target == today.add(const Duration(days: 1))) return 'Tomorrow';
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
     const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     return weekdays[target.weekday - 1];
   }
@@ -65,11 +52,7 @@ class _WeatherDetailsScreenState extends State<WeatherDetailsScreen> {
           children: [
             Column(
               children: [
-<<<<<<< HEAD
                 AppHeader(appState: widget.appState, showBack: true, onBack: () => Navigator.canPop(context) ? context.pop() : context.go('/dashboard')),
-=======
-                AppHeader(appState: widget.appState, showBack: true, onBack: () => context.go('/dashboard')),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                 Expanded(
                   child: FutureBuilder<Weather>(
                     future: _weatherFuture,
@@ -81,21 +64,12 @@ class _WeatherDetailsScreenState extends State<WeatherDetailsScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             TextButton.icon(
-<<<<<<< HEAD
                               onPressed: () => Navigator.canPop(context) ? context.pop() : context.go('/dashboard'),
                               icon: const Icon(Icons.arrow_back, color: AppColors.primary),
                               label: Text(AppLocalizations.of(context)!.back, style: const TextStyle(color: AppColors.primary)),
                             ),
                             const SizedBox(height: 6),
                             Text(AppLocalizations.of(context)!.weatherForecast, style: Theme.of(context).textTheme.headlineSmall),
-=======
-                              onPressed: () => context.go('/dashboard'),
-                              icon: const Icon(Icons.arrow_back, color: AppColors.primary),
-                              label: const Text('Back', style: TextStyle(color: AppColors.primary)),
-                            ),
-                            const SizedBox(height: 6),
-                            Text('Weather Forecast', style: Theme.of(context).textTheme.headlineSmall),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                             const SizedBox(height: 12),
                             Container(
                               width: double.infinity,
@@ -118,39 +92,24 @@ class _WeatherDetailsScreenState extends State<WeatherDetailsScreen> {
                                   const SizedBox(height: 4),
                                   Text(weather.condition, style: const TextStyle(color: Colors.white, fontSize: 18)),
                                   const SizedBox(height: 2),
-<<<<<<< HEAD
                                   Text('${AppLocalizations.of(context)!.feelsLike} ${_formatTemp(weather.feelsLikeC)}', style: const TextStyle(color: Colors.white70)),
-=======
-                                  Text('Feels like ${_formatTemp(weather.feelsLikeC)}', style: const TextStyle(color: Colors.white70)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                                   const SizedBox(height: 10),
                                   const Divider(color: Colors.white70),
                                   const SizedBox(height: 10),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-<<<<<<< HEAD
                                       _Metric(icon: Icons.water_drop, label: AppLocalizations.of(context)!.humidity, value: '${weather.humidity}%'),
                                       _Metric(icon: Icons.air, label: AppLocalizations.of(context)!.wind, value: '${weather.windKph} km/h'),
                                       _Metric(icon: Icons.remove_red_eye, label: AppLocalizations.of(context)!.visibility, value: '${weather.visibilityKm} km'),
                                       _Metric(icon: Icons.speed, label: AppLocalizations.of(context)!.pressure, value: '${weather.pressureMb} mb'),
-=======
-                                      _Metric(icon: Icons.water_drop, label: 'Humidity', value: '${weather.humidity}%'),
-                                      _Metric(icon: Icons.air, label: 'Wind', value: '${weather.windKph} km/h'),
-                                      _Metric(icon: Icons.remove_red_eye, label: 'Visibility', value: '${weather.visibilityKm} km'),
-                                      _Metric(icon: Icons.speed, label: 'Pressure', value: '${weather.pressureMb} mb'),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                                     ],
                                   ),
                                 ],
                               ),
                             ),
                             const SizedBox(height: 16),
-<<<<<<< HEAD
                             Text(AppLocalizations.of(context)!.sevenDayForecast, style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w600, fontSize: 16)),
-=======
-                            const Text('7-Day Forecast', style: TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w600, fontSize: 16)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                             const SizedBox(height: 8),
                             ...weather.dailyForecast.take(7).map((day) {
                               return Container(
@@ -191,11 +150,7 @@ class _WeatherDetailsScreenState extends State<WeatherDetailsScreen> {
                             Container(
                               padding: const EdgeInsets.all(14),
                               decoration: BoxDecoration(color: Colors.blue.shade50, borderRadius: BorderRadius.circular(16), border: Border.all(color: Colors.blue.shade200)),
-<<<<<<< HEAD
                               child: Text(AppLocalizations.of(context)!.heavyRainWarning, style: const TextStyle(color: AppColors.primaryDark)),
-=======
-                              child: const Text('Heavy rainfall expected later this week. Plan your farming activities accordingly.', style: TextStyle(color: AppColors.primaryDark)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                             ),
                           ],
                         ),

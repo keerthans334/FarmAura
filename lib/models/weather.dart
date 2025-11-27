@@ -35,11 +35,7 @@ class Weather {
         minTempC: 22 - i,
         rainChance: (i * 10) % 80,
         condition: cond,
-<<<<<<< HEAD
         iconName: getIconNameForCondition(cond),
-=======
-        iconName: _iconNameForCondition(cond),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
       );
     });
     return Weather(
@@ -50,11 +46,7 @@ class Weather {
       windKph: 12,
       visibilityKm: 10,
       pressureMb: 1013,
-<<<<<<< HEAD
       iconName: getIconNameForCondition('Sunny'),
-=======
-      iconName: _iconNameForCondition('Sunny'),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
       dailyForecast: samples,
     );
   }
@@ -72,30 +64,19 @@ class Weather {
       windKph: (current['wind_kph'] as num?)?.round() ?? 0,
       visibilityKm: (current['vis_km'] as num?)?.round() ?? 0,
       pressureMb: (current['pressure_mb'] as num?)?.round() ?? 0,
-<<<<<<< HEAD
       iconName: getIconNameForCondition(conditionText),
-=======
-      iconName: _iconNameForCondition(conditionText),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
       dailyForecast: daily.isNotEmpty ? daily : Weather.sample().dailyForecast,
     );
   }
 
-<<<<<<< HEAD
   static String getIconNameForCondition(String condition) {
-=======
-  static String _iconNameForCondition(String condition) {
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
     final c = condition.toLowerCase();
     if (c.contains('thunder')) return 'storm';
     if (c.contains('rain') || c.contains('drizzle') || c.contains('shower')) return 'rain';
     if (c.contains('cloudy') || c.contains('overcast')) return 'cloudy';
     if (c.contains('partly') || c.contains('partly cloudy')) return 'partly_cloudy';
     if (c.contains('sun') || c.contains('clear')) return 'sunny';
-<<<<<<< HEAD
     if (c.contains('snow') || c.contains('ice')) return 'snow'; // Added snow support
-=======
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
     return 'sunny';
   }
 }
@@ -129,11 +110,7 @@ class DailyForecast {
       minTempC: (day['mintemp_c'] as num?)?.round() ?? 0,
       rainChance: (day['daily_chance_of_rain'] as num?)?.round() ?? 0,
       condition: cond,
-<<<<<<< HEAD
       iconName: Weather.getIconNameForCondition(cond),
-=======
-      iconName: Weather._iconNameForCondition(cond),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
     );
   }
 }

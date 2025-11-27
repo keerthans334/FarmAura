@@ -5,10 +5,7 @@ import '../models/app_state.dart';
 import '../theme/app_theme.dart';
 import '../widgets/app_header.dart';
 import '../widgets/language_change_modal.dart';
-<<<<<<< HEAD
 import 'package:farmaura/l10n/app_localizations.dart';
-=======
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key, required this.appState});
@@ -30,19 +27,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: Column(
           children: [
             AppHeader(
-<<<<<<< HEAD
               title: AppLocalizations.of(context)!.settings,
               showBack: true,
               showProfile: false,
               appState: widget.appState,
               onBack: () => Navigator.canPop(context) ? context.pop() : context.go('/profile'),
-=======
-              title: 'Settings',
-              showBack: true,
-              showProfile: false,
-              appState: widget.appState,
-              onBack: () => context.go('/profile'),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
             ),
             Expanded(
               child: SingleChildScrollView(
@@ -50,7 +39,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-<<<<<<< HEAD
                     _topCard(context),
                     const SizedBox(height: 16),
                     _sectionTitle(AppLocalizations.of(context)!.preferences),
@@ -59,26 +47,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       icon: LucideIcons.bell,
                       title: AppLocalizations.of(context)!.notifications,
                       subtitle: notificationsEnabled ? AppLocalizations.of(context)!.enabled : AppLocalizations.of(context)!.disabled,
-=======
-                    _topCard(),
-                    const SizedBox(height: 16),
-                    _sectionTitle('Preferences'),
-                    const SizedBox(height: 8),
-                    _toggleTile(
-                      icon: LucideIcons.bell,
-                      title: 'Notifications',
-                      subtitle: notificationsEnabled ? 'Enabled' : 'Disabled',
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                       value: notificationsEnabled,
                       onChanged: (val) => setState(() => notificationsEnabled = val),
                     ),
                     _navTile(
                       icon: LucideIcons.languages,
-<<<<<<< HEAD
                       title: AppLocalizations.of(context)!.language,
-=======
-                      title: 'Language',
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                       subtitle: widget.appState.userLanguage,
                       onTap: () => showModalBottomSheet<void>(
                         context: context,
@@ -89,35 +63,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                     _navTile(
                       icon: LucideIcons.mapPin,
-<<<<<<< HEAD
                       title: AppLocalizations.of(context)!.location,
-=======
-                      title: 'Location',
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                       subtitle: "${location['district']}, ${location['state']}",
                       onTap: () {},
                     ),
                     const SizedBox(height: 14),
-<<<<<<< HEAD
                     _sectionTitle(AppLocalizations.of(context)!.privacySecurity),
                     const SizedBox(height: 8),
                     _navTile(
                       icon: LucideIcons.shield,
                       title: AppLocalizations.of(context)!.privacyPolicy,
                       subtitle: AppLocalizations.of(context)!.privacyPolicySubtitle,
-=======
-                    _sectionTitle('Privacy & Security'),
-                    const SizedBox(height: 8),
-                    _navTile(
-                      icon: LucideIcons.shield,
-                      title: 'Privacy Policy',
-                      subtitle: 'Read how we handle data',
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                       onTap: () => context.go('/privacy-policy'),
                     ),
                     _navTile(
                       icon: LucideIcons.fileText,
-<<<<<<< HEAD
                       title: AppLocalizations.of(context)!.termsOfService,
                       subtitle: AppLocalizations.of(context)!.termsOfServiceSubtitle,
                       onTap: () => context.go('/terms-conditions'),
@@ -129,38 +89,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       icon: LucideIcons.lifeBuoy,
                       title: AppLocalizations.of(context)!.helpSupport,
                       subtitle: AppLocalizations.of(context)!.helpSupportSubtitle,
-=======
-                      title: 'Terms of Service',
-                      subtitle: 'Usage terms & conditions',
-                      onTap: () => context.go('/terms-conditions'),
-                    ),
-                    const SizedBox(height: 14),
-                    _sectionTitle('Support'),
-                    const SizedBox(height: 8),
-                    _navTile(
-                      icon: LucideIcons.lifeBuoy,
-                      title: 'Help & Support',
-                      subtitle: 'Get assistance',
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                       onTap: () => context.go('/help-support'),
                     ),
                     _navTile(
                       icon: LucideIcons.info,
-<<<<<<< HEAD
                       title: AppLocalizations.of(context)!.about,
                       subtitle: AppLocalizations.of(context)!.aboutSubtitle,
                       onTap: () => context.go('/about-us'),
                     ),
                     const SizedBox(height: 16),
                     _govCard(context),
-=======
-                      title: 'About',
-                      subtitle: 'Know more about Farmaura',
-                      onTap: () => context.go('/about-us'),
-                    ),
-                    const SizedBox(height: 16),
-                    _govCard(),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                   ],
                 ),
               ),
@@ -171,11 +109,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-<<<<<<< HEAD
   Widget _topCard(BuildContext context) {
-=======
-  Widget _topCard() {
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -195,17 +129,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-<<<<<<< HEAD
               children: [
                 Text(AppLocalizations.of(context)!.settings, style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700)),
                 const SizedBox(height: 4),
                 const Text('Manage your preferences', style: TextStyle(color: Colors.white70)),
-=======
-              children: const [
-                Text('Settings', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700)),
-                SizedBox(height: 4),
-                Text('Manage your preferences', style: TextStyle(color: Colors.white70)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
               ],
             ),
           ),
@@ -246,11 +173,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-<<<<<<< HEAD
   Widget _govCard(BuildContext context) {
-=======
-  Widget _govCard() {
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -262,32 +185,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-<<<<<<< HEAD
         children: [
           const Icon(LucideIcons.badgeCheck, color: AppColors.primaryDark),
           const SizedBox(width: 12),
-=======
-        children: const [
-          Icon(LucideIcons.badgeCheck, color: AppColors.primaryDark),
-          SizedBox(width: 12),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-<<<<<<< HEAD
                 Text(AppLocalizations.of(context)!.govJharkhand, style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700)),
                 const SizedBox(height: 4),
                 Text(AppLocalizations.of(context)!.govSubtitle, style: const TextStyle(color: AppColors.muted)),
                 const SizedBox(height: 6),
                 Text('${AppLocalizations.of(context)!.version} 1.0.0', style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w600)),
-=======
-                Text('Government of Jharkhand', style: TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700)),
-                SizedBox(height: 4),
-                Text('Empowering farmers with digital advisory and market access.', style: TextStyle(color: AppColors.muted)),
-                SizedBox(height: 6),
-                Text('Version 1.0.0', style: TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w600)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
               ],
             ),
           ),

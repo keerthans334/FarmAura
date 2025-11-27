@@ -45,15 +45,11 @@ class _AiChatbotScreenState extends State<AiChatbotScreen> {
   }
 
   void _handleBack() {
-<<<<<<< HEAD
     if (Navigator.canPop(context)) {
       context.pop();
     } else {
       context.go('/dashboard');
     }
-=======
-    context.go('/dashboard');
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
   }
 
   Future<void> _startListening() async {

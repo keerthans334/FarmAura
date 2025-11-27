@@ -6,11 +6,7 @@ import '../models/app_state.dart';
 import '../theme/app_theme.dart';
 import '../widgets/floating_ivr.dart';
 
-<<<<<<< HEAD
 import 'package:farmaura/l10n/app_localizations.dart';
-
-=======
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
 class ProfileSetupScreen extends StatefulWidget {
   const ProfileSetupScreen({super.key, required this.appState});
   final AppState appState;
@@ -56,15 +52,9 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                     child: const Icon(LucideIcons.userCircle2, color: Colors.white, size: 46),
                   ),
                   const SizedBox(height: 12),
-<<<<<<< HEAD
                   Text(AppLocalizations.of(context)!.personalInformation, style: Theme.of(context).textTheme.headlineSmall),
                   const SizedBox(height: 4),
                   Text(AppLocalizations.of(context)!.helpUsKnowYou, style: const TextStyle(color: AppColors.muted)),
-=======
-                  Text('Personal Information', style: Theme.of(context).textTheme.headlineSmall),
-                  const SizedBox(height: 4),
-                  const Text('Help us know you better', style: TextStyle(color: AppColors.muted)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                   const SizedBox(height: 16),
                   Container(
                     padding: const EdgeInsets.all(16),
@@ -77,15 +67,9 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                       key: _formKey,
                       child: Column(
                         children: [
-<<<<<<< HEAD
                           _buildField(AppLocalizations.of(context)!.fullName, _nameCtrl),
                           _buildField(AppLocalizations.of(context)!.villageName, _villageCtrl),
                           _buildField(AppLocalizations.of(context)!.emailOptional, _emailCtrl, keyboard: TextInputType.emailAddress, validator: (_) => null),
-=======
-                          _buildField('Full Name', _nameCtrl),
-                          _buildField('Village Name', _villageCtrl),
-                          _buildField('Email Address (Optional)', _emailCtrl, keyboard: TextInputType.emailAddress, validator: (_) => null),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                           const SizedBox(height: 4),
                           _occupationGrid(),
                           const SizedBox(height: 12),
@@ -108,11 +92,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                                 backgroundColor: AppColors.primary,
                                 foregroundColor: Colors.white,
                               ),
-<<<<<<< HEAD
                               child: Text(AppLocalizations.of(context)!.continueText),
-=======
-                              child: const Text('Continue'),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                             ),
                           ),
                         ],
@@ -151,11 +131,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
           TextFormField(
             controller: controller,
             keyboardType: keyboard,
-<<<<<<< HEAD
             validator: validator ?? (v) => (v == null || v.isEmpty) ? AppLocalizations.of(context)!.required : null,
-=======
-            validator: validator ?? (v) => (v == null || v.isEmpty) ? 'Required' : null,
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
             decoration: const InputDecoration(hintText: ''),
           ),
         ],
@@ -169,11 +145,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-<<<<<<< HEAD
           Text(AppLocalizations.of(context)!.occupation, style: const TextStyle(color: AppColors.primaryDark, fontSize: 13)),
-=======
-          const Text('Occupation', style: TextStyle(color: AppColors.primaryDark, fontSize: 13)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
           const SizedBox(height: 8),
           LayoutBuilder(
             builder: (context, constraints) {

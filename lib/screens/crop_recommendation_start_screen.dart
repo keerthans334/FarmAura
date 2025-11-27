@@ -6,11 +6,7 @@ import '../widgets/app_header.dart';
 import '../widgets/app_footer.dart';
 import '../widgets/floating_ivr.dart';
 
-<<<<<<< HEAD
 import 'package:farmaura/l10n/app_localizations.dart';
-
-=======
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
 class CropRecommendationStartScreen extends StatelessWidget {
   const CropRecommendationStartScreen({super.key, required this.appState});
   final AppState appState;
@@ -41,7 +37,6 @@ class CropRecommendationStartScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
-<<<<<<< HEAD
                                 children: [
                                   const Icon(Icons.auto_awesome, color: Colors.white),
                                   const SizedBox(width: 6),
@@ -52,18 +47,6 @@ class CropRecommendationStartScreen extends StatelessWidget {
                               Text(AppLocalizations.of(context)!.cropAdvisory, style: const TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.w700)),
                               const SizedBox(height: 8),
                               Text(AppLocalizations.of(context)!.getPersonalizedRecommendations, style: const TextStyle(color: Colors.white70)),
-=======
-                                children: const [
-                                  Icon(Icons.auto_awesome, color: Colors.white),
-                                  SizedBox(width: 6),
-                                  Text('AI-Powered', style: TextStyle(color: Colors.white70)),
-                                ],
-                              ),
-                              const SizedBox(height: 12),
-                              const Text('Crop Advisory', style: TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.w700)),
-                              const SizedBox(height: 8),
-                              const Text('Get personalized crop recommendations based on your farm\'s unique conditions', style: TextStyle(color: Colors.white70)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                               const SizedBox(height: 16),
                               SizedBox(
                                 width: double.infinity,
@@ -75,11 +58,7 @@ class CropRecommendationStartScreen extends StatelessWidget {
                                     backgroundColor: Colors.white,
                                     foregroundColor: AppColors.primary,
                                   ),
-<<<<<<< HEAD
                                   child: Text(AppLocalizations.of(context)!.startCropAdvisory),
-=======
-                                  child: const Text('Start Crop Advisory'),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                                 ),
                               ),
                             ],
@@ -100,19 +79,11 @@ class CropRecommendationStartScreen extends StatelessWidget {
                         const SizedBox(height: 16),
                         Row(
                           children: [
-<<<<<<< HEAD
                             _statCard(title: '98%', subtitle: AppLocalizations.of(context)!.accuracy, icon: Icons.trending_up, color: AppColors.primary),
                             const SizedBox(width: 10),
                             _statCard(title: '50K+', subtitle: AppLocalizations.of(context)!.farmers, icon: Icons.groups, color: AppColors.accent),
                             const SizedBox(width: 10),
                             _statCard(title: '30+', subtitle: AppLocalizations.of(context)!.crops, icon: Icons.spa, color: AppColors.primary),
-=======
-                            _statCard(title: '98%', subtitle: 'Accuracy', icon: Icons.trending_up, color: AppColors.primary),
-                            const SizedBox(width: 10),
-                            _statCard(title: '50K+', subtitle: 'Farmers', icon: Icons.groups, color: AppColors.accent),
-                            const SizedBox(width: 10),
-                            _statCard(title: '30+', subtitle: 'Crops', icon: Icons.spa, color: AppColors.primary),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                           ],
                         ),
                         const SizedBox(height: 16),
@@ -121,21 +92,12 @@ class CropRecommendationStartScreen extends StatelessWidget {
                           decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 12, offset: const Offset(0, 10))]),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-<<<<<<< HEAD
                             children: [
                               Text(AppLocalizations.of(context)!.howItWorks, style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700, fontSize: 18)),
                               const SizedBox(height: 12),
                               _StepTile(number: '1', title: AppLocalizations.of(context)!.enterFarmDetails, subtitle: AppLocalizations.of(context)!.provideInfo),
                               _StepTile(number: '2', title: AppLocalizations.of(context)!.shareSoilData, subtitle: AppLocalizations.of(context)!.enterSoilInfo),
                               _StepTile(number: '3', title: AppLocalizations.of(context)!.getAiRecommendations, subtitle: AppLocalizations.of(context)!.receiveSuggestions),
-=======
-                            children: const [
-                              Text('How It Works', style: TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700, fontSize: 18)),
-                              SizedBox(height: 12),
-                              _StepTile(number: '1', title: 'Enter Farm Details', subtitle: 'Provide information about your land size, irrigation, and location'),
-                              _StepTile(number: '2', title: 'Share Soil Data', subtitle: 'Enter soil type, pH levels, and nutrient information'),
-                              _StepTile(number: '3', title: 'Get AI Recommendations', subtitle: 'Receive top 3 crop suggestions with detailed yield and profit analysis'),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                             ],
                           ),
                         ),
@@ -148,7 +110,6 @@ class CropRecommendationStartScreen extends StatelessWidget {
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-<<<<<<< HEAD
                             children: [
                               Text(AppLocalizations.of(context)!.whyUseAdvisory, style: const TextStyle(color: AppColors.primaryDark, fontSize: 18, fontWeight: FontWeight.w700)),
                               const SizedBox(height: 10),
@@ -156,15 +117,6 @@ class CropRecommendationStartScreen extends StatelessWidget {
                               _Bullet(text: AppLocalizations.of(context)!.reduceRisk),
                               _Bullet(text: AppLocalizations.of(context)!.marketDemandSuggestions),
                               _Bullet(text: AppLocalizations.of(context)!.growingGuides),
-=======
-                            children: const [
-                              Text('Why Use Crop Advisory?', style: TextStyle(color: AppColors.primaryDark, fontSize: 18, fontWeight: FontWeight.w700)),
-                              SizedBox(height: 10),
-                              _Bullet(text: 'Maximize your farm profits with data-driven decisions'),
-                              _Bullet(text: 'Reduce crop failure risk with suitable crop selection'),
-                              _Bullet(text: 'Get market-demand based crop suggestions'),
-                              _Bullet(text: 'Access detailed growing guides for each crop'),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                             ],
                           ),
                         ),

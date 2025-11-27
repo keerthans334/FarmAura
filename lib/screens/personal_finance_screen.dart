@@ -7,10 +7,7 @@ import '../theme/app_theme.dart';
 import '../widgets/app_header.dart';
 import '../widgets/app_footer.dart';
 import '../widgets/floating_ivr.dart';
-<<<<<<< HEAD
 import 'package:farmaura/l10n/app_localizations.dart';
-=======
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
 
 class SavingsGoal {
   const SavingsGoal({required this.title, required this.current, required this.target, required this.progress, required this.icon});
@@ -143,15 +140,11 @@ class _PersonalFinanceScreenState extends State<PersonalFinanceScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-<<<<<<< HEAD
         if (Navigator.canPop(context)) {
           context.pop();
         } else {
           context.go('/dashboard');
         }
-=======
-        context.go('/profile');
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
         return false;
       },
       child: Scaffold(
@@ -166,7 +159,6 @@ class _PersonalFinanceScreenState extends State<PersonalFinanceScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AppHeader(
-<<<<<<< HEAD
                       title: AppLocalizations.of(context)!.personalFinance,
                       showBack: true,
                       showProfile: false,
@@ -191,32 +183,6 @@ class _PersonalFinanceScreenState extends State<PersonalFinanceScreen> {
                     _buildExpenseBreakdown(context),
                     const SizedBox(height: 20),
                     _buildUpcomingPayments(context),
-=======
-                      title: 'Personal Finance',
-                      showBack: true,
-                      showProfile: false,
-                      appState: widget.appState,
-                      onBack: () => context.go('/profile'),
-                    ),
-                    const SizedBox(height: 16),
-                    _buildOverviewCard(),
-                    const SizedBox(height: 16),
-                    _buildActionButtons(),
-                    const SizedBox(height: 20),
-                    _buildSavingsGoals(),
-                    const SizedBox(height: 20),
-                    _buildActiveLoans(),
-                    const SizedBox(height: 20),
-                    _buildRecentTransactions(),
-                    const SizedBox(height: 20),
-                    _buildTrend(),
-                    const SizedBox(height: 20),
-                    _buildCropAnalysis(),
-                    const SizedBox(height: 20),
-                    _buildExpenseBreakdown(),
-                    const SizedBox(height: 20),
-                    _buildUpcomingPayments(),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                     const SizedBox(height: 20),
                     _buildFinancialTip(),
                     const SizedBox(height: 12),
@@ -231,11 +197,7 @@ class _PersonalFinanceScreenState extends State<PersonalFinanceScreen> {
     );
   }
 
-<<<<<<< HEAD
   Widget _buildOverviewCard(BuildContext context) {
-=======
-  Widget _buildOverviewCard() {
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -250,11 +212,7 @@ class _PersonalFinanceScreenState extends State<PersonalFinanceScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-<<<<<<< HEAD
               Text(AppLocalizations.of(context)!.financialOverview, style: const TextStyle(color: Colors.white70, fontSize: 14)),
-=======
-              const Text('Financial Overview', style: TextStyle(color: Colors.white70, fontSize: 14)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
               Container(
                 width: 34,
                 height: 34,
@@ -270,39 +228,24 @@ class _PersonalFinanceScreenState extends State<PersonalFinanceScreen> {
           ),
           const SizedBox(height: 10),
           Row(
-<<<<<<< HEAD
             children: [
               Expanded(child: _OverviewStat(label: AppLocalizations.of(context)!.totalRevenue, value: '₹4,45,000')),
               const SizedBox(width: 12),
               Expanded(child: _OverviewStat(label: AppLocalizations.of(context)!.netProfit, value: '₹1,78,000')),
-=======
-            children: const [
-              Expanded(child: _OverviewStat(label: 'Total Revenue', value: '₹4,45,000')),
-              SizedBox(width: 12),
-              Expanded(child: _OverviewStat(label: 'Net Profit', value: '₹1,78,000')),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
             ],
           ),
           const SizedBox(height: 12),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(20)),
-<<<<<<< HEAD
             child: Text('${AppLocalizations.of(context)!.profitMargin}: 40%', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
-=======
-            child: const Text('Profit Margin: 40%', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
           ),
         ],
       ),
     );
   }
 
-<<<<<<< HEAD
   Widget _buildActionButtons(BuildContext context) {
-=======
-  Widget _buildActionButtons() {
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
     return Row(
       children: [
         Expanded(
@@ -314,11 +257,7 @@ class _PersonalFinanceScreenState extends State<PersonalFinanceScreen> {
               padding: const EdgeInsets.symmetric(vertical: 14),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             ),
-<<<<<<< HEAD
             label: Text(AppLocalizations.of(context)!.addIncome, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
-=======
-            label: const Text('Add Income', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
           ),
         ),
         const SizedBox(width: 12),
@@ -332,36 +271,21 @@ class _PersonalFinanceScreenState extends State<PersonalFinanceScreen> {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
               elevation: 0,
             ),
-<<<<<<< HEAD
             label: Text(AppLocalizations.of(context)!.addExpense, style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w600)),
-=======
-            label: const Text('Add Expense', style: TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w600)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
           ),
         ),
       ],
     );
   }
-<<<<<<< HEAD
   Widget _buildSavingsGoals(BuildContext context) {
-=======
-  Widget _buildSavingsGoals() {
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-<<<<<<< HEAD
           children: [
             const Icon(Icons.savings, color: AppColors.primaryDark, size: 18),
             const SizedBox(width: 8),
             Text(AppLocalizations.of(context)!.savingsGoals, style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700, fontSize: 18)),
-=======
-          children: const [
-            Icon(Icons.savings, color: AppColors.primaryDark, size: 18),
-            SizedBox(width: 8),
-            Text('Savings Goals', style: TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700, fontSize: 18)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
           ],
         ),
         const SizedBox(height: 12),
@@ -417,26 +341,15 @@ class _PersonalFinanceScreenState extends State<PersonalFinanceScreen> {
     );
   }
 
-<<<<<<< HEAD
   Widget _buildActiveLoans(BuildContext context) {
-=======
-  Widget _buildActiveLoans() {
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-<<<<<<< HEAD
           children: [
             const Icon(Icons.account_balance_wallet, color: AppColors.primaryDark, size: 18),
             const SizedBox(width: 8),
             Text(AppLocalizations.of(context)!.activeLoans, style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700, fontSize: 18)),
-=======
-          children: const [
-            Icon(Icons.account_balance_wallet, color: AppColors.primaryDark, size: 18),
-            SizedBox(width: 8),
-            Text('Active Loans', style: TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700, fontSize: 18)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
           ],
         ),
         const SizedBox(height: 12),
@@ -519,26 +432,15 @@ class _PersonalFinanceScreenState extends State<PersonalFinanceScreen> {
     );
   }
 
-<<<<<<< HEAD
   Widget _buildRecentTransactions(BuildContext context) {
-=======
-  Widget _buildRecentTransactions() {
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-<<<<<<< HEAD
           children: [
             const Icon(Icons.list_alt, color: AppColors.primaryDark, size: 18),
             const SizedBox(width: 8),
             Text(AppLocalizations.of(context)!.recentTransactions, style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700, fontSize: 18)),
-=======
-          children: const [
-            Icon(Icons.list_alt, color: AppColors.primaryDark, size: 18),
-            SizedBox(width: 8),
-            Text('Recent Transactions', style: TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700, fontSize: 18)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
           ],
         ),
         const SizedBox(height: 12),
@@ -546,27 +448,16 @@ class _PersonalFinanceScreenState extends State<PersonalFinanceScreen> {
       ],
     );
   }
-<<<<<<< HEAD
   Widget _buildTrend(BuildContext context) {
-=======
-  Widget _buildTrend() {
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
     final maxValue = yearlyProfit.map((e) => e.value).fold<double>(0, (prev, v) => v > prev ? v : prev);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-<<<<<<< HEAD
           children: [
             const Icon(Icons.show_chart, color: AppColors.primaryDark, size: 18),
             const SizedBox(width: 8),
             Text(AppLocalizations.of(context)!.monthlyProfitTrend, style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700, fontSize: 18)),
-=======
-          children: const [
-            Icon(Icons.show_chart, color: AppColors.primaryDark, size: 18),
-            SizedBox(width: 8),
-            Text('Monthly Profit Trend', style: TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700, fontSize: 18)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
           ],
         ),
         const SizedBox(height: 12),
@@ -574,17 +465,10 @@ class _PersonalFinanceScreenState extends State<PersonalFinanceScreen> {
           children: _Range.values.map((r) {
             final isActive = r == _selectedRange;
             final label = r == _Range.month
-<<<<<<< HEAD
                 ? AppLocalizations.of(context)!.month
                 : r == _Range.quarter
                     ? AppLocalizations.of(context)!.quarter
                     : AppLocalizations.of(context)!.year;
-=======
-                ? 'Month'
-                : r == _Range.quarter
-                    ? 'Quarter'
-                    : 'Year';
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
             return Expanded(
               child: GestureDetector(
                 onTap: () => setState(() => _selectedRange = r),
@@ -661,19 +545,11 @@ class _PersonalFinanceScreenState extends State<PersonalFinanceScreen> {
     );
   }
 
-<<<<<<< HEAD
   Widget _buildCropAnalysis(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(AppLocalizations.of(context)!.cropWiseAnalysis, style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700, fontSize: 18)),
-=======
-  Widget _buildCropAnalysis() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('Crop-wise Profit Analysis', style: TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700, fontSize: 18)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
         const SizedBox(height: 12),
         ...cropProfits.map(
           (c) => Container(
@@ -703,15 +579,9 @@ class _PersonalFinanceScreenState extends State<PersonalFinanceScreen> {
                       const SizedBox(height: 6),
                       Row(
                         children: [
-<<<<<<< HEAD
                           _miniStat(AppLocalizations.of(context)!.investment, c.investment),
                           const SizedBox(width: 10),
                           _miniStat(AppLocalizations.of(context)!.revenue, c.revenue),
-=======
-                          _miniStat('Investment', c.investment),
-                          const SizedBox(width: 10),
-                          _miniStat('Revenue', c.revenue),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                         ],
                       ),
                     ],
@@ -744,26 +614,15 @@ class _PersonalFinanceScreenState extends State<PersonalFinanceScreen> {
     );
   }
 
-<<<<<<< HEAD
   Widget _buildExpenseBreakdown(BuildContext context) {
-=======
-  Widget _buildExpenseBreakdown() {
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-<<<<<<< HEAD
           children: [
             const Icon(Icons.pie_chart, color: AppColors.primaryDark, size: 18),
             const SizedBox(width: 8),
             Text(AppLocalizations.of(context)!.expenseBreakdown, style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700, fontSize: 18)),
-=======
-          children: const [
-            Icon(Icons.pie_chart, color: AppColors.primaryDark, size: 18),
-            SizedBox(width: 8),
-            Text('Expense Breakdown', style: TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700, fontSize: 18)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
           ],
         ),
         const SizedBox(height: 12),
@@ -810,26 +669,15 @@ class _PersonalFinanceScreenState extends State<PersonalFinanceScreen> {
     );
   }
 
-<<<<<<< HEAD
   Widget _buildUpcomingPayments(BuildContext context) {
-=======
-  Widget _buildUpcomingPayments() {
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-<<<<<<< HEAD
           children: [
             const Icon(Icons.calendar_today_outlined, color: AppColors.primaryDark, size: 18),
             const SizedBox(width: 8),
             Text(AppLocalizations.of(context)!.upcomingPayments, style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700, fontSize: 18)),
-=======
-          children: const [
-            Icon(Icons.calendar_today_outlined, color: AppColors.primaryDark, size: 18),
-            SizedBox(width: 8),
-            Text('Upcoming Payments', style: TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700, fontSize: 18)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
           ],
         ),
         const SizedBox(height: 12),

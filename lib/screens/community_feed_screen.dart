@@ -1,19 +1,12 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
 import 'package:go_router/go_router.dart';
-=======
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
 import '../models/app_state.dart';
 import '../theme/app_theme.dart';
 import '../widgets/app_header.dart';
 import '../widgets/app_footer.dart';
 import '../widgets/floating_ivr.dart';
 
-<<<<<<< HEAD
 import 'package:farmaura/l10n/app_localizations.dart';
-
-=======
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
 class CommunityFeedScreen extends StatelessWidget {
   const CommunityFeedScreen({super.key, required this.appState});
   final AppState appState;
@@ -32,7 +25,6 @@ class CommunityFeedScreen extends StatelessWidget {
           children: [
             Column(
               children: [
-<<<<<<< HEAD
                 AppHeader(
                   title: AppLocalizations.of(context)!.community,
                   showBack: true,
@@ -40,9 +32,6 @@ class CommunityFeedScreen extends StatelessWidget {
                   appState: appState,
                   onBack: () => Navigator.canPop(context) ? context.pop() : context.go('/dashboard'),
                 ),
-=======
-                AppHeader(title: 'Community', showBack: true, showProfile: false, appState: appState),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                 Expanded(
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),

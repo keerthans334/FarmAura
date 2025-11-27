@@ -5,7 +5,6 @@
 import FlutterMacOS
 import Foundation
 
-<<<<<<< HEAD
 import geolocator_apple
 import location
 import path_provider_foundation
@@ -22,12 +21,4 @@ func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   SpeechToTextPlugin.register(with: registry.registrar(forPlugin: "SpeechToTextPlugin"))
   UrlLauncherPlugin.register(with: registry.registrar(forPlugin: "UrlLauncherPlugin"))
   WebViewFlutterPlugin.register(with: registry.registrar(forPlugin: "WebViewFlutterPlugin"))
-=======
-import path_provider_foundation
-import speech_to_text
-
-func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
-  PathProviderPlugin.register(with: registry.registrar(forPlugin: "PathProviderPlugin"))
-  SpeechToTextPlugin.register(with: registry.registrar(forPlugin: "SpeechToTextPlugin"))
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
 }

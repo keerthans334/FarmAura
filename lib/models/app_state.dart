@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
 import '../services/location_service.dart';
 import 'package:geolocator/geolocator.dart';
-=======
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
 
 class AppState extends ChangeNotifier {
   String userLanguage = 'English';
@@ -75,7 +72,6 @@ class AppState extends ChangeNotifier {
 
   void updateFarmDetails(Map<String, dynamic> data) {
     farmDetails = {...farmDetails, ...data};
-<<<<<<< HEAD
     
     // Sync pastCrops to cropHistory
     if (data.containsKey('pastCrops')) {
@@ -98,9 +94,6 @@ class AppState extends ChangeNotifier {
       }
       cropHistory = currentHistory;
     }
-    
-=======
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
     notifyListeners();
   }
 
@@ -124,7 +117,6 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-<<<<<<< HEAD
   Future<void> updateLocationFromService() async {
     try {
       final service = LocationService();
@@ -156,9 +148,6 @@ class AppState extends ChangeNotifier {
       rethrow;
     }
   }
-
-=======
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
   void setImages(List<String> images) {
     capturedImages = List<String>.from(images);
     notifyListeners();

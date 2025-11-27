@@ -360,5 +360,7 @@
   "enableLocation": "स्थान सेवा सक्षम करें",
   "locationRequiredMessage": "सटीक मौसम और कृषि डेटा प्राप्त करने के लिए कृपया अपना जीपीएस स्थान चालू करें।",
   "openSettings": "सेटिंग्स खोलें",
-  "locationRequired": "स्थान आवश्यक है"
+  "locationRequired": "स्थान आवश्यक है",
+  "yield": "उपज",
+  "profit": "लाभ"
 }

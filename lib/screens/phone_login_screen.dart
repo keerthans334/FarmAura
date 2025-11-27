@@ -5,11 +5,7 @@ import '../models/app_state.dart';
 import '../theme/app_theme.dart';
 import '../widgets/floating_ivr.dart';
 
-<<<<<<< HEAD
 import 'package:farmaura/l10n/app_localizations.dart';
-
-=======
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
 class PhoneLoginScreen extends StatefulWidget {
   const PhoneLoginScreen({super.key, required this.appState, this.isNewUser = false});
   final AppState appState;
@@ -49,21 +45,12 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                     child: Icon(loginType == 'phone' ? LucideIcons.phone : LucideIcons.badge, color: Colors.white, size: 46),
                   ),
                   const SizedBox(height: 12),
-<<<<<<< HEAD
                   Text(AppLocalizations.of(context)!.welcomeBack, style: Theme.of(context).textTheme.headlineMedium),
                   const SizedBox(height: 6),
                   Text(
                     loginType == 'phone'
                         ? AppLocalizations.of(context)!.enterPhoneToContinue
                         : AppLocalizations.of(context)!.enterShcNumber,
-=======
-                  Text('Welcome Back!', style: Theme.of(context).textTheme.headlineMedium),
-                  const SizedBox(height: 6),
-                  Text(
-                    loginType == 'phone'
-                        ? 'Enter your phone number to continue'
-                        : 'Enter your SHC registration number',
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                     style: const TextStyle(color: AppColors.muted),
                     textAlign: TextAlign.center,
                   ),
@@ -83,21 +70,13 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                           child: Row(
                             children: [
                               _ToggleChip(
-<<<<<<< HEAD
                                 label: AppLocalizations.of(context)!.phone,
-=======
-                                label: 'Phone',
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                                 icon: LucideIcons.phone,
                                 active: loginType == 'phone',
                                 onTap: () => setState(() => loginType = 'phone'),
                               ),
                               _ToggleChip(
-<<<<<<< HEAD
                                 label: AppLocalizations.of(context)!.shcId,
-=======
-                                label: 'SHC ID',
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                                 icon: LucideIcons.badge,
                                 active: loginType == 'shc',
                                 onTap: () => setState(() => loginType = 'shc'),
@@ -109,11 +88,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                         if (loginType == 'phone') ...[
                           Align(
                             alignment: Alignment.centerLeft,
-<<<<<<< HEAD
                             child: Text(AppLocalizations.of(context)!.phoneNumber, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 14)),
-=======
-                            child: Text('Phone Number', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 14)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                           ),
                           const SizedBox(height: 8),
                           Row(
@@ -134,15 +109,9 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                                 child: TextField(
                                   keyboardType: TextInputType.number,
                                   maxLength: 10,
-<<<<<<< HEAD
                                   decoration: InputDecoration(
                                     counterText: '',
                                     hintText: AppLocalizations.of(context)!.enterTenDigit,
-=======
-                                  decoration: const InputDecoration(
-                                    counterText: '',
-                                    hintText: 'Enter 10 digit number',
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                                   ),
                                   onChanged: (value) => setState(() => phone = value.replaceAll(RegExp(r'[^0-9]'), '')),
                                 ),
@@ -152,21 +121,13 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                         ] else ...[
                           Align(
                             alignment: Alignment.centerLeft,
-<<<<<<< HEAD
                             child: Text(AppLocalizations.of(context)!.shcRegistrationNumber, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 14)),
-=======
-                            child: Text('SHC Registration Number', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 14)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                           ),
                           const SizedBox(height: 8),
                           TextField(
                             maxLength: 15,
                             textCapitalization: TextCapitalization.characters,
-<<<<<<< HEAD
                             decoration: InputDecoration(hintText: AppLocalizations.of(context)!.enterShcNumber, counterText: ''),
-=======
-                            decoration: const InputDecoration(hintText: 'Enter SHC registration number', counterText: ''),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                             onChanged: (value) => setState(() => shcNumber = value.toUpperCase()),
                           ),
                         ],
@@ -188,11 +149,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                               foregroundColor: Colors.white,
                               disabledBackgroundColor: Colors.grey.shade300,
                             ),
-<<<<<<< HEAD
                             child: Text(loginType == 'phone' ? AppLocalizations.of(context)!.sendOtp : AppLocalizations.of(context)!.submit),
-=======
-                            child: Text(loginType == 'phone' ? 'Send OTP' : 'Submit'),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                           ),
                         ),
                         const SizedBox(height: 8),

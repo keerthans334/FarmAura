@@ -1,3 +1,4 @@
+
 name: farmaura
 description: "A new Flutter project."
 publish_to: 'none'
@@ -18,7 +19,6 @@ dependencies:
   speech_to_text: ^7.3.0
   http: ^1.2.1
   cupertino_icons: ^1.0.8
-<<<<<<< HEAD
   webview_flutter: ^4.8.0
   url_launcher: ^6.3.0
   geolocator: ^13.0.1
@@ -28,20 +28,21 @@ dependencies:
     sdk: flutter
   intl: ^0.20.2
   shared_preferences: ^2.3.2
-=======
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/app_icon.jpeg"
 
 flutter:
   uses-material-design: true
-<<<<<<< HEAD
   generate: true
-=======
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
   assets:
     - assets/icons/
     - assets/icons/occupation/

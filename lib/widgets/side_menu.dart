@@ -4,10 +4,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../models/app_state.dart';
 import '../theme/app_theme.dart';
 import 'language_change_modal.dart';
-<<<<<<< HEAD
 import 'package:farmaura/l10n/app_localizations.dart';
-=======
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
 
 class SideMenu extends StatelessWidget {
   const SideMenu({super.key, required this.appState, required this.onClose});
@@ -21,7 +18,6 @@ class SideMenu extends StatelessWidget {
     final panelWidth = width < 360 ? width * 0.85 : width - 48;
 
     final items = [
-<<<<<<< HEAD
       _MenuItem(icon: LucideIcons.home, label: AppLocalizations.of(context)!.home, path: '/dashboard'),
       _MenuItem(icon: LucideIcons.user, label: AppLocalizations.of(context)!.profile, path: '/profile'),
       _MenuItem(icon: LucideIcons.dollarSign, label: AppLocalizations.of(context)!.personalFinance, path: '/finance'),
@@ -29,15 +25,6 @@ class SideMenu extends StatelessWidget {
       _MenuItem(icon: LucideIcons.upload, label: AppLocalizations.of(context)!.soilHealthCardUpload, path: '/soil'),
       _MenuItem(icon: LucideIcons.gift, label: AppLocalizations.of(context)!.governmentSchemes, path: '/community'),
       _MenuItem(icon: LucideIcons.helpCircle, label: AppLocalizations.of(context)!.helpSupport, path: '/help'),
-=======
-      _MenuItem(icon: LucideIcons.home, label: 'Home', path: '/dashboard'),
-      _MenuItem(icon: LucideIcons.user, label: 'Profile', path: '/profile'),
-      _MenuItem(icon: LucideIcons.dollarSign, label: 'Personal Finance', path: '/finance'),
-      _MenuItem(icon: LucideIcons.settings, label: 'Settings', path: '/settings'),
-      _MenuItem(icon: LucideIcons.upload, label: 'Soil Health Card Upload', path: '/soil'),
-      _MenuItem(icon: LucideIcons.gift, label: 'Government Schemes', path: '/community'),
-      _MenuItem(icon: LucideIcons.helpCircle, label: 'Help & Support', path: '/help'),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
     ];
 
     return Stack(
@@ -69,24 +56,15 @@ class SideMenu extends StatelessWidget {
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-<<<<<<< HEAD
                         children: [
-=======
-                        children: const [
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                           CircleAvatar(
                             radius: 28,
                             backgroundColor: Colors.white24,
                             child: Text('FA', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w700)),
                           ),
                           SizedBox(height: 10),
-<<<<<<< HEAD
                           Text(AppLocalizations.of(context)!.appTitle, style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600)),
                           Text(AppLocalizations.of(context)!.govJharkhand, style: const TextStyle(color: Colors.white70, fontSize: 12)),
-=======
-                          Text('FarmAura', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600)),
-                          Text('Government of Jharkhand', style: TextStyle(color: Colors.white70, fontSize: 12)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                         ],
                       ),
                       Positioned(
@@ -108,11 +86,7 @@ class SideMenu extends StatelessWidget {
                       ListTile(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                         leading: const Icon(LucideIcons.languages, color: AppColors.primaryDark, size: 20),
-<<<<<<< HEAD
                         title: Text(AppLocalizations.of(context)!.language, style: const TextStyle(color: AppColors.primaryDark)),
-=======
-                        title: const Text('Language', style: TextStyle(color: AppColors.primaryDark)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                         trailing: Text(appState.userLanguage, style: const TextStyle(color: AppColors.muted, fontSize: 12)),
                         onTap: () async {
                           await showModalBottomSheet<void>(
@@ -135,11 +109,7 @@ class SideMenu extends StatelessWidget {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                     tileColor: Colors.red.shade50,
                     leading: const Icon(LucideIcons.logOut, color: Colors.red, size: 20),
-<<<<<<< HEAD
                     title: Text(AppLocalizations.of(context)!.logout, style: const TextStyle(color: Colors.red)),
-=======
-                    title: const Text('Logout', style: TextStyle(color: Colors.red)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                     onTap: () {
                       context.go('/');
                     },

@@ -6,10 +6,7 @@ import '../theme/app_theme.dart';
 import '../widgets/app_footer.dart';
 import '../widgets/app_header.dart';
 import '../widgets/floating_ivr.dart';
-<<<<<<< HEAD
 import 'package:farmaura/l10n/app_localizations.dart';
-=======
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key, required this.appState});
@@ -22,11 +19,7 @@ class ProfileScreen extends StatelessWidget {
     final stats = appState.profileStats;
     final location = appState.location;
     final cropsList = (farm['mainCrops'] as List?)?.whereType<String>().toList() ?? const [];
-<<<<<<< HEAD
     final crops = cropsList.isNotEmpty ? cropsList.join(', ') : '${AppLocalizations.of(context)!.maize}, ${AppLocalizations.of(context)!.wheat}';
-=======
-    final crops = cropsList.isNotEmpty ? cropsList.join(', ') : 'Maize, Wheat';
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
     final locationParts = <String>[
       if ((user['village'] as String?)?.isNotEmpty == true) user['village'] as String,
       if ((user['district'] as String?)?.isNotEmpty == true)
@@ -47,19 +40,11 @@ class ProfileScreen extends StatelessWidget {
             Column(
               children: [
                 AppHeader(
-<<<<<<< HEAD
                   title: AppLocalizations.of(context)!.myProfile,
                   showBack: true,
                   showProfile: false,
                   appState: appState,
                   onBack: () => Navigator.canPop(context) ? context.pop() : context.go('/dashboard'),
-=======
-                  title: 'My Profile',
-                  showBack: true,
-                  showProfile: false,
-                  appState: appState,
-                  onBack: () => context.go('/dashboard'),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                 ),
                 Expanded(
                   child: SingleChildScrollView(
@@ -69,7 +54,6 @@ class ProfileScreen extends StatelessWidget {
                       children: [
                         _profileCard(context, user, locationLine, stats),
                         const SizedBox(height: 18),
-<<<<<<< HEAD
                         _sectionTitle(AppLocalizations.of(context)!.myFarmSummary),
                         const SizedBox(height: 10),
                         _farmSummaryGrid(context, farm, crops),
@@ -83,21 +67,6 @@ class ProfileScreen extends StatelessWidget {
                         _savedRecommendations(context, appState.savedRecommendations),
                         const SizedBox(height: 18),
                         _sectionTitle(AppLocalizations.of(context)!.actions),
-=======
-                        _sectionTitle('My Farm Summary'),
-                        const SizedBox(height: 10),
-                        _farmSummaryGrid(farm, crops),
-                        const SizedBox(height: 18),
-                        _sectionTitle('Crop History'),
-                        const SizedBox(height: 10),
-                        _cropHistory(appState.cropHistory),
-                        const SizedBox(height: 18),
-                        _sectionTitle('Saved Recommendations'),
-                        const SizedBox(height: 10),
-                        _savedRecommendations(context, appState.savedRecommendations),
-                        const SizedBox(height: 18),
-                        _sectionTitle('Actions'),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                         const SizedBox(height: 8),
                         _actionsList(context),
                       ],
@@ -143,19 +112,11 @@ class ProfileScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-<<<<<<< HEAD
                       (user['name'] as String?)?.isNotEmpty == true ? user['name'] as String : AppLocalizations.of(context)!.farmer,
                       style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700),
                     ),
                     Text(
                       (user['occupation'] as String?)?.isNotEmpty == true ? user['occupation'] as String : AppLocalizations.of(context)!.farmer,
-=======
-                      (user['name'] as String?)?.isNotEmpty == true ? user['name'] as String : 'Farmer',
-                      style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700),
-                    ),
-                    Text(
-                      (user['occupation'] as String?)?.isNotEmpty == true ? user['occupation'] as String : 'Farmer',
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                       style: const TextStyle(color: Colors.white70, fontSize: 13),
                     ),
                     const SizedBox(height: 6),
@@ -165,11 +126,7 @@ class ProfileScreen extends StatelessWidget {
                         const SizedBox(width: 6),
                         Expanded(
                           child: Text(
-<<<<<<< HEAD
                             locationLine.isNotEmpty ? locationLine : AppLocalizations.of(context)!.jharkhand,
-=======
-                            locationLine.isNotEmpty ? locationLine : 'Jharkhand',
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                             style: const TextStyle(color: Colors.white70, fontSize: 13),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -210,19 +167,11 @@ class ProfileScreen extends StatelessWidget {
             ),
             child: Row(
               children: [
-<<<<<<< HEAD
                 _statItem(AppLocalizations.of(context)!.cropsGrown, "${stats['cropsGrown'] ?? 0}"),
                 _divider(),
                 _statItem(AppLocalizations.of(context)!.activeFields, "${stats['activeFields'] ?? 0}"),
                 _divider(),
                 _statItem(AppLocalizations.of(context)!.rating, ratingText),
-=======
-                _statItem('Crops Grown', "${stats['cropsGrown'] ?? 0}"),
-                _divider(),
-                _statItem('Active Fields', "${stats['activeFields'] ?? 0}"),
-                _divider(),
-                _statItem('Rating', ratingText),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
               ],
             ),
           ),
@@ -257,21 +206,12 @@ class ProfileScreen extends StatelessWidget {
     return Text(text, style: const TextStyle(color: AppColors.primaryDark, fontSize: 16, fontWeight: FontWeight.w700));
   }
 
-<<<<<<< HEAD
   Widget _farmSummaryGrid(BuildContext context, Map<String, dynamic> farm, String crops) {
     final summaryItems = [
       {'title': AppLocalizations.of(context)!.landSize, 'value': (farm['landSize'] ?? '2-5 Acres').toString(), 'icon': LucideIcons.ruler},
       {'title': AppLocalizations.of(context)!.irrigation, 'value': (farm['irrigation'] ?? 'Rainfed').toString(), 'icon': LucideIcons.droplets},
       {'title': AppLocalizations.of(context)!.soilType, 'value': (farm['soilType'] ?? 'Loamy').toString(), 'icon': LucideIcons.shovel},
       {'title': AppLocalizations.of(context)!.mainCrops, 'value': crops, 'icon': LucideIcons.wheat},
-=======
-  Widget _farmSummaryGrid(Map<String, dynamic> farm, String crops) {
-    final summaryItems = [
-      {'title': 'Land Size', 'value': (farm['landSize'] ?? '2-5 Acres').toString(), 'icon': LucideIcons.ruler},
-      {'title': 'Irrigation', 'value': (farm['irrigation'] ?? 'Rainfed').toString(), 'icon': LucideIcons.droplets},
-      {'title': 'Soil Type', 'value': (farm['soilType'] ?? 'Loamy').toString(), 'icon': LucideIcons.shovel},
-      {'title': 'Main Crops', 'value': crops, 'icon': LucideIcons.wheat},
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
     ];
 
     return GridView.builder(
@@ -320,15 +260,9 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-<<<<<<< HEAD
   Widget _cropHistory(BuildContext context, List<Map<String, dynamic>> history) {
     if (history.isEmpty) {
       return Text(AppLocalizations.of(context)!.noCropHistory, style: const TextStyle(color: AppColors.muted));
-=======
-  Widget _cropHistory(List<Map<String, dynamic>> history) {
-    if (history.isEmpty) {
-      return const Text('No crop history added yet', style: TextStyle(color: AppColors.muted));
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
     }
 
     return SizedBox(
@@ -369,8 +303,6 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-<<<<<<< HEAD
-=======
                 const Spacer(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -378,20 +310,19 @@ class ProfileScreen extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('Yield', style: TextStyle(color: AppColors.muted, fontSize: 12)),
+                        Text(AppLocalizations.of(context)!.yield, style: const TextStyle(color: AppColors.muted, fontSize: 12)),
                         Text("${item['yield'] ?? '-'} ${item['unit'] ?? ''}", style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700)),
                       ],
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        const Text('Profit', style: TextStyle(color: AppColors.muted, fontSize: 12)),
+                        Text(AppLocalizations.of(context)!.profit, style: const TextStyle(color: AppColors.muted, fontSize: 12)),
                         Text(item['profit']?.toString() ?? '-', style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700)),
                       ],
                     ),
                   ],
                 ),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
               ],
             ),
           );
@@ -402,7 +333,6 @@ class ProfileScreen extends StatelessWidget {
 
   Widget _savedRecommendations(BuildContext context, List<Map<String, dynamic>> recommendations) {
     if (recommendations.isEmpty) {
-<<<<<<< HEAD
       return Text(AppLocalizations.of(context)!.noSavedRecommendations, style: const TextStyle(color: AppColors.muted));
     }
 
@@ -451,56 +381,6 @@ class ProfileScreen extends StatelessWidget {
           );
         },
       ),
-=======
-      return const Text('No saved recommendations yet', style: TextStyle(color: AppColors.muted));
-    }
-
-    return Column(
-      children: recommendations
-          .map(
-            (rec) => Container(
-              margin: const EdgeInsets.only(bottom: 10),
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 8))],
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(color: AppColors.primary.withOpacity(0.12), borderRadius: BorderRadius.circular(10)),
-                    child: const Icon(LucideIcons.sprout, color: AppColors.primaryDark, size: 18),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(rec['crop']?.toString() ?? 'Crop', style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700)),
-                        Text(rec['date']?.toString() ?? '', style: const TextStyle(color: AppColors.muted, fontSize: 12)),
-                      ],
-                    ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text("${rec['suitability'] ?? 0}%", style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700)),
-                      TextButton(
-                        onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Open details for ${rec['crop'] ?? 'crop'}")),
-                        ),
-                        child: const Text('View'),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          )
-          .toList(),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
     );
   }
 
@@ -510,53 +390,32 @@ class ProfileScreen extends StatelessWidget {
         _actionTile(
           context,
           icon: LucideIcons.edit3,
-<<<<<<< HEAD
           title: AppLocalizations.of(context)!.editProfile,
-=======
-          title: 'Edit Profile',
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
           onTap: () => context.go('/profile-edit'),
         ),
         _actionTile(
           context,
           icon: LucideIcons.wallet,
-<<<<<<< HEAD
           title: AppLocalizations.of(context)!.personalFinance,
-=======
-          title: 'Personal Finance',
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
           onTap: () => context.go('/finance'),
         ),
         _actionTile(
           context,
           icon: LucideIcons.wheat,
-<<<<<<< HEAD
           title: AppLocalizations.of(context)!.manageFarms,
-=======
-          title: 'Manage Farms',
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
           onTap: () => context.go('/farm-details'),
         ),
         _actionTile(
           context,
           icon: LucideIcons.settings,
-<<<<<<< HEAD
           title: AppLocalizations.of(context)!.settings,
-=======
-          title: 'Settings',
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
           onTap: () => context.go('/settings'),
         ),
         _actionTile(
           context,
           icon: LucideIcons.logOut,
-<<<<<<< HEAD
           title: AppLocalizations.of(context)!.logout,
           onTap: () => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.logoutClicked))),
-=======
-          title: 'Logout',
-          onTap: () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Logout clicked'))),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
         ),
       ],
     );

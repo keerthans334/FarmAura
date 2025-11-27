@@ -5,10 +5,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../models/app_state.dart';
 import '../theme/app_theme.dart';
 import '../widgets/floating_ivr.dart';
-<<<<<<< HEAD
 import '../utils/location_helper.dart';
-=======
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
 
 class FarmSetupScreen extends StatefulWidget {
   const FarmSetupScreen({super.key, required this.appState});
@@ -50,10 +47,7 @@ class _FarmSetupScreenState extends State<FarmSetupScreen> {
   String? irrigation;
   String customLandSize = '';
   bool detected = false;
-<<<<<<< HEAD
   bool _isLocating = false;
-=======
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
   final List<String> selectedPastCrops = [];
   final TextEditingController customCropController = TextEditingController();
 
@@ -126,7 +120,6 @@ class _FarmSetupScreenState extends State<FarmSetupScreen> {
                         const SizedBox(height: 10),
                         InkWell(
                           borderRadius: BorderRadius.circular(18),
-<<<<<<< HEAD
                           onTap: _isLocating ? null : () async {
                             setState(() => _isLocating = true);
                             try {
@@ -149,11 +142,6 @@ class _FarmSetupScreenState extends State<FarmSetupScreen> {
                                 }
                               }
                             }
-=======
-                          onTap: () {
-                            setState(() => detected = true);
-                            widget.appState.updateLocation({'detected': true});
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                           },
                           child: Container(
                             width: double.infinity,
@@ -169,7 +157,6 @@ class _FarmSetupScreenState extends State<FarmSetupScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               mainAxisSize: MainAxisSize.min,
                               children: [
-<<<<<<< HEAD
                                 if (_isLocating)
                                   const SizedBox(
                                     width: 20,
@@ -180,11 +167,6 @@ class _FarmSetupScreenState extends State<FarmSetupScreen> {
                                   SvgPicture.asset('assets/icons/location/gps_arrow.svg', width: 20, height: 20, colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn)),
                                 const SizedBox(width: 8),
                                 Text(_isLocating ? 'Detecting...' : 'Auto-Detect via GPS', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-=======
-                                SvgPicture.asset('assets/icons/location/gps_arrow.svg', width: 20, height: 20, colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn)),
-                                const SizedBox(width: 8),
-                                const Text('Auto-Detect via GPS', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                               ],
                             ),
                           ),

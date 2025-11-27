@@ -7,12 +7,9 @@ import '../widgets/app_header.dart';
 import '../widgets/app_footer.dart';
 import '../widgets/floating_ivr.dart';
 import 'recommendation_results_screen.dart';
-<<<<<<< HEAD
 import '../utils/location_helper.dart';
 
 import 'package:farmaura/l10n/app_localizations.dart';
-=======
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
 
 class CombinedInputScreen extends StatefulWidget {
   const CombinedInputScreen({super.key, required this.appState});
@@ -69,7 +66,6 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
     return requiredFields.every((e) => e.isNotEmpty);
   }
 
-<<<<<<< HEAD
   String _getLocalizedValue(BuildContext context, String value) {
     final loc = AppLocalizations.of(context)!;
     switch (value) {
@@ -112,9 +108,6 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
       default: return value;
     }
   }
-
-=======
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,11 +118,7 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
           children: [
             Column(
               children: [
-<<<<<<< HEAD
                 AppHeader(title: AppLocalizations.of(context)!.cropInput, showBack: true, showProfile: false, appState: widget.appState),
-=======
-                AppHeader(title: 'Crop Input', showBack: true, showProfile: false, appState: widget.appState),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                 Expanded(
                   child: SingleChildScrollView(
                     keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -137,41 +126,24 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-<<<<<<< HEAD
                         Text(AppLocalizations.of(context)!.cropAdvisoryForm, style: Theme.of(context).textTheme.headlineSmall),
                         const SizedBox(height: 4),
                         Text(AppLocalizations.of(context)!.fillDetails, style: const TextStyle(color: AppColors.muted)),
                         const SizedBox(height: 12),
                         _sectionCard(
                           title: AppLocalizations.of(context)!.sectionFarmDetails,
-=======
-                        Text('Crop Advisory Form', style: Theme.of(context).textTheme.headlineSmall),
-                        const SizedBox(height: 4),
-                        const Text('Fill details for personalized recommendations', style: TextStyle(color: AppColors.muted)),
-                        const SizedBox(height: 12),
-                        _sectionCard(
-                          title: 'Section A - Farm Details',
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
                             children: [
-<<<<<<< HEAD
                               Text(AppLocalizations.of(context)!.landSize, style: const TextStyle(color: AppColors.muted)),
-=======
-                              const Text('Land Size', style: TextStyle(color: AppColors.muted)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                               const SizedBox(height: 6),
                               Wrap(
                                 spacing: 8,
                                 runSpacing: 8,
                                 children: landSizes
                                     .map((size) => ChoiceChip(
-<<<<<<< HEAD
                                           label: Text(_getLocalizedValue(context, size)),
-=======
-                                          label: Text(size),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                                           selected: landSize == size,
                                           onSelected: (_) => setState(() => landSize = size),
                                           selectedColor: AppColors.primary,
@@ -183,31 +155,19 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
                                 Padding(
                                   padding: const EdgeInsets.only(top: 8),
                                   child: TextField(
-<<<<<<< HEAD
                                     decoration: InputDecoration(hintText: AppLocalizations.of(context)!.enterLandSize),
-=======
-                                    decoration: const InputDecoration(hintText: 'Enter land size'),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                                     onChanged: (v) => setState(() => customInputs['landSize'] = v),
                                   ),
                                 ),
                               const SizedBox(height: 12),
-<<<<<<< HEAD
                               Text(AppLocalizations.of(context)!.irrigationType, style: const TextStyle(color: AppColors.muted)),
-=======
-                              const Text('Irrigation Type', style: TextStyle(color: AppColors.muted)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                               const SizedBox(height: 6),
                               Wrap(
                                 spacing: 8,
                                 runSpacing: 8,
                                 children: irrigationTypes
                                     .map((type) => ChoiceChip(
-<<<<<<< HEAD
                                           label: Text(_getLocalizedValue(context, type)),
-=======
-                                          label: Text(type),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                                           selected: irrigation == type,
                                           onSelected: (_) => setState(() => irrigation = type),
                                           selectedColor: AppColors.primary,
@@ -219,11 +179,7 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
                                 Padding(
                                   padding: const EdgeInsets.only(top: 8),
                                   child: TextField(
-<<<<<<< HEAD
                                     decoration: InputDecoration(hintText: AppLocalizations.of(context)!.enterIrrigationType),
-=======
-                                    decoration: const InputDecoration(hintText: 'Enter irrigation type'),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                                     onChanged: (v) => setState(() => customInputs['irrigation'] = v),
                                   ),
                                 ),
@@ -232,11 +188,7 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
                         ),
                         const SizedBox(height: 12),
                         _sectionCard(
-<<<<<<< HEAD
                           title: AppLocalizations.of(context)!.sectionSoilInfo,
-=======
-                          title: 'Section B - Soil Information',
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
@@ -247,7 +199,6 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-<<<<<<< HEAD
                                     Text(AppLocalizations.of(context)!.chooseInputMethod, style: const TextStyle(color: AppColors.primaryDark, fontSize: 13)),
                                     const SizedBox(height: 8),
                                     Row(
@@ -257,17 +208,6 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
                                         _modeButton('manual', AppLocalizations.of(context)!.manual, LucideIcons.edit),
                                         const SizedBox(width: 8),
                                         _modeButton('shc', AppLocalizations.of(context)!.shc, LucideIcons.upload),
-=======
-                                    const Text('Choose Input Method:', style: TextStyle(color: AppColors.primaryDark, fontSize: 13)),
-                                    const SizedBox(height: 8),
-                                    Row(
-                                      children: [
-                                        _modeButton('auto', 'Auto-detect', LucideIcons.navigation),
-                                        const SizedBox(width: 8),
-                                        _modeButton('manual', 'Manual', LucideIcons.edit),
-                                        const SizedBox(width: 8),
-                                        _modeButton('shc', 'SHC', LucideIcons.upload),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                                       ],
                                     ),
                                   ],
@@ -283,43 +223,25 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
                                 ),
                               if (soilInputMode == 'manual') ...[
                                 DropdownButtonFormField<String>(
-<<<<<<< HEAD
                                   decoration: InputDecoration(labelText: AppLocalizations.of(context)!.soilType),
                                   initialValue: soilType.isEmpty ? null : soilType,
                                   items: soilTypes.map((t) => DropdownMenuItem(value: t, child: Text(_getLocalizedValue(context, t)))).toList(),
-=======
-                                  decoration: const InputDecoration(labelText: 'Soil Type'),
-                                  initialValue: soilType.isEmpty ? null : soilType,
-                                  items: soilTypes.map((t) => DropdownMenuItem(value: t, child: Text(t))).toList(),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                                   onChanged: (v) => setState(() => soilType = v ?? ''),
                                 ),
                                 if (soilType == 'Other (Manual)')
                                   TextField(
-<<<<<<< HEAD
                                     decoration: InputDecoration(hintText: AppLocalizations.of(context)!.enterSoilType),
                                     onChanged: (v) => setState(() => customInputs['soilType'] = v),
                                   ),
                                 const SizedBox(height: 12),
                                 Text(AppLocalizations.of(context)!.soilTexture, style: const TextStyle(color: AppColors.muted)),
-=======
-                                    decoration: const InputDecoration(hintText: 'Enter soil type'),
-                                    onChanged: (v) => setState(() => customInputs['soilType'] = v),
-                                  ),
-                                const SizedBox(height: 12),
-                                const Text('Soil Texture', style: TextStyle(color: AppColors.muted)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                                 const SizedBox(height: 6),
                                 Wrap(
                                   spacing: 8,
                                   runSpacing: 8,
                                   children: soilTextures
                                       .map((t) => ChoiceChip(
-<<<<<<< HEAD
                                             label: Text(_getLocalizedValue(context, t)),
-=======
-                                            label: Text(t),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                                             selected: texture == t,
                                             onSelected: (_) => setState(() => texture = t),
                                             selectedColor: AppColors.primary,
@@ -331,11 +253,7 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
                                   Padding(
                                     padding: const EdgeInsets.only(top: 8),
                                     child: TextField(
-<<<<<<< HEAD
                                       decoration: InputDecoration(hintText: AppLocalizations.of(context)!.enterSoilTexture),
-=======
-                                      decoration: const InputDecoration(hintText: 'Enter soil texture'),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                                       onChanged: (v) => setState(() => customInputs['texture'] = v),
                                     ),
                                   ),
@@ -351,17 +269,10 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
                                 ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-<<<<<<< HEAD
                                   children: [
                                     Text(AppLocalizations.of(context)!.acidic, style: const TextStyle(color: AppColors.muted, fontSize: 12)),
                                     Text(AppLocalizations.of(context)!.neutral, style: const TextStyle(color: AppColors.muted, fontSize: 12)),
                                     Text(AppLocalizations.of(context)!.alkaline, style: const TextStyle(color: AppColors.muted, fontSize: 12)),
-=======
-                                  children: const [
-                                    Text('Acidic (4)', style: TextStyle(color: AppColors.muted, fontSize: 12)),
-                                    Text('Neutral (7)', style: TextStyle(color: AppColors.muted, fontSize: 12)),
-                                    Text('Alkaline (10)', style: TextStyle(color: AppColors.muted, fontSize: 12)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                                   ],
                                 ),
                                 const SizedBox(height: 12),
@@ -375,11 +286,7 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
                                   ],
                                 ),
                                 const SizedBox(height: 12),
-<<<<<<< HEAD
                                 _MiniInput(label: AppLocalizations.of(context)!.soilMoisture, hint: AppLocalizations.of(context)!.enterMoisture),
-=======
-                                const _MiniInput(label: 'Soil Moisture (%)', hint: 'Enter moisture percentage'),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                               ],
                               if (soilInputMode == 'shc')
                                 Container(
@@ -401,34 +308,19 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
                                           border: Border.all(color: AppColors.accent, width: 3),
                                         ),
                                         child: Column(
-<<<<<<< HEAD
                                           children: [
                                             const Text('SHC', style: TextStyle(fontSize: 24, color: Colors.white)),
                                             const SizedBox(height: 6),
                                             Text(AppLocalizations.of(context)!.uploadShc, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
                                             const SizedBox(height: 2),
                                             Text(AppLocalizations.of(context)!.recommendedForAccuracy, style: const TextStyle(color: Colors.white70, fontSize: 12)),
-=======
-                                          children: const [
-                                            Text('SHC', style: TextStyle(fontSize: 24, color: Colors.white)),
-                                            SizedBox(height: 6),
-                                            Text('Upload Soil Health Card', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
-                                            SizedBox(height: 2),
-                                            Text('Recommended for accurate results', style: TextStyle(color: Colors.white70, fontSize: 12)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                                           ],
                                         ),
                                       ),
                                       const SizedBox(height: 12),
-<<<<<<< HEAD
                                       _MiniInput(label: AppLocalizations.of(context)!.shcNumber, hint: AppLocalizations.of(context)!.enterShcNumberInput),
                                       const SizedBox(height: 8),
                                       _MiniInput(label: AppLocalizations.of(context)!.testDate, hint: 'YYYY-MM-DD'),
-=======
-                                      const _MiniInput(label: 'SHC Number', hint: 'Enter SHC number'),
-                                      const SizedBox(height: 8),
-                                      const _MiniInput(label: 'Test Date', hint: 'YYYY-MM-DD'),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                                     ],
                                   ),
                                 ),
@@ -437,79 +329,40 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
                         ),
                         const SizedBox(height: 12),
                         _sectionCard(
-<<<<<<< HEAD
                           title: AppLocalizations.of(context)!.sectionCropRotation,
-=======
-                          title: 'Section C - Past Crop Rotation',
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               DropdownButtonFormField<String>(
-<<<<<<< HEAD
                                 decoration: InputDecoration(labelText: AppLocalizations.of(context)!.lastCropGrown),
                                 initialValue: lastCrop.isEmpty ? null : lastCrop,
                                 items: crops.map((c) => DropdownMenuItem(value: c, child: Text(_getLocalizedValue(context, c)))).toList(),
-=======
-                                decoration: const InputDecoration(labelText: 'Last Crop Grown'),
-                                initialValue: lastCrop.isEmpty ? null : lastCrop,
-                                items: crops.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                                 onChanged: (v) => setState(() => lastCrop = v ?? ''),
                               ),
                               if (lastCrop == 'Other (Manual)')
                                 TextField(
-<<<<<<< HEAD
                                   decoration: InputDecoration(hintText: AppLocalizations.of(context)!.enterLastCrop),
-=======
-                                  decoration: const InputDecoration(hintText: 'Enter last crop'),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                                   onChanged: (v) => setState(() => customInputs['lastCrop'] = v),
                                 ),
                               const SizedBox(height: 12),
                               DropdownButtonFormField<String>(
-<<<<<<< HEAD
                                 decoration: InputDecoration(labelText: AppLocalizations.of(context)!.frequentCrop),
                                 initialValue: frequentCrop.isEmpty ? null : frequentCrop,
                                 items: crops.map((c) => DropdownMenuItem(value: c, child: Text(_getLocalizedValue(context, c)))).toList(),
-=======
-                                decoration: const InputDecoration(labelText: 'Frequent Crop'),
-                                initialValue: frequentCrop.isEmpty ? null : frequentCrop,
-                                items: crops.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                                 onChanged: (v) => setState(() => frequentCrop = v ?? ''),
                               ),
                               if (frequentCrop == 'Other (Manual)')
                                 TextField(
-<<<<<<< HEAD
                                   decoration: InputDecoration(hintText: AppLocalizations.of(context)!.enterFrequentCrop),
                                   onChanged: (v) => setState(() => customInputs['previousCrop'] = v),
                                 ),
                               const SizedBox(height: 12),
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(AppLocalizations.of(context)!.fertilizerDetails, style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w600)),
-=======
-                                  decoration: const InputDecoration(hintText: 'Enter frequent crop'),
-                                  onChanged: (v) => setState(() => customInputs['previousCrop'] = v),
-                                ),
+                              ...fertilizers.map((f) => _fertilizerCard(f)).toList(),
                               const SizedBox(height: 12),
-                              const Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text('Fertilizer Details', style: TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w600)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
-                              ),
-                              const SizedBox(height: 8),
-                              ...fertilizers.map((fert) => _fertilizerCard(fert)),
-                              const SizedBox(height: 8),
                               ElevatedButton.icon(
                                 onPressed: () => setState(() => fertilizers.add(FertilizerEntry(id: (fertilizers.length + 1).toString()))),
                                 icon: const Icon(LucideIcons.plus),
-<<<<<<< HEAD
                                 label: Text(AppLocalizations.of(context)!.addFertilizer),
-=======
-                                label: const Text('Add Fertilizer'),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.primary,
                                   foregroundColor: Colors.white,
@@ -539,7 +392,6 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
                               foregroundColor: Colors.white,
                               disabledBackgroundColor: Colors.grey.shade300,
                             ),
-<<<<<<< HEAD
                             child: Text(AppLocalizations.of(context)!.getRecommendation),
                           ),
                         ),
@@ -547,15 +399,6 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
                           Padding(
                             padding: const EdgeInsets.only(top: 8),
                             child: Text(AppLocalizations.of(context)!.fillAllFields, style: const TextStyle(color: AppColors.muted, fontSize: 12)),
-=======
-                            child: const Text('Get Recommendation'),
-                          ),
-                        ),
-                        if (!isValid)
-                          const Padding(
-                            padding: EdgeInsets.only(top: 8),
-                            child: Text('Please fill all required fields to continue', style: TextStyle(color: AppColors.muted, fontSize: 12)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                           ),
                       ],
                     ),
@@ -574,7 +417,6 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
     final active = soilInputMode == mode;
     return Expanded(
       child: GestureDetector(
-<<<<<<< HEAD
         onTap: () async {
           setState(() => soilInputMode = mode);
           if (mode == 'auto') {
@@ -594,9 +436,6 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
             }
           }
         },
-=======
-        onTap: () => setState(() => soilInputMode = mode),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 160),
           padding: const EdgeInsets.symmetric(vertical: 12),
@@ -655,11 +494,7 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-<<<<<<< HEAD
               Text('${AppLocalizations.of(context)!.fertilizerDetails} ${fert.id}', style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w600)),
-=======
-              Text('Fertilizer ${fert.id}', style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w600)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
               if (fertilizers.length > 1)
                 IconButton(
                   onPressed: () => setState(() => fertilizers.removeWhere((f) => f.id == fert.id)),
@@ -668,17 +503,10 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
             ],
           ),
           DropdownButtonFormField<String>(
-<<<<<<< HEAD
             decoration: InputDecoration(labelText: AppLocalizations.of(context)!.selectFertilizer),
             isExpanded: true,
             initialValue: fert.fertilizer.isEmpty ? null : fert.fertilizer,
             items: fertilizersList.map((f) => DropdownMenuItem(value: f, child: Text(_getLocalizedValue(context, f)))).toList(),
-=======
-            decoration: const InputDecoration(labelText: 'Select fertilizer'),
-            isExpanded: true,
-            initialValue: fert.fertilizer.isEmpty ? null : fert.fertilizer,
-            items: fertilizersList.map((f) => DropdownMenuItem(value: f, child: Text(f))).toList(),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
             onChanged: (v) => setState(() {
               fert.fertilizer = v ?? '';
               fert.isOther = v == 'Other (Manual)';
@@ -686,11 +514,7 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
           ),
           if (fert.isOther)
             TextField(
-<<<<<<< HEAD
               decoration: InputDecoration(hintText: AppLocalizations.of(context)!.enterFertilizerName),
-=======
-              decoration: const InputDecoration(hintText: 'Enter fertilizer name'),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
               onChanged: (v) => setState(() => fert.customFertilizer = v),
             ),
           const SizedBox(height: 8),
@@ -698,11 +522,7 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
             children: [
               Expanded(
                 child: TextField(
-<<<<<<< HEAD
                   decoration: InputDecoration(labelText: AppLocalizations.of(context)!.quantity),
-=======
-                  decoration: const InputDecoration(labelText: 'Quantity'),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                   keyboardType: TextInputType.number,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   onChanged: (v) => setState(() => fert.quantity = v),
@@ -711,17 +531,10 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
               const SizedBox(width: 12),
               Expanded(
                 child: DropdownButtonFormField<String>(
-<<<<<<< HEAD
                   decoration: InputDecoration(labelText: AppLocalizations.of(context)!.unit),
                   isExpanded: true,
                   initialValue: fert.unit.isEmpty ? null : fert.unit,
                   items: units.map((u) => DropdownMenuItem(value: u, child: Text(_getLocalizedValue(context, u)))).toList(),
-=======
-                  decoration: const InputDecoration(labelText: 'Unit'),
-                  isExpanded: true,
-                  initialValue: fert.unit.isEmpty ? null : fert.unit,
-                  items: units.map((u) => DropdownMenuItem(value: u, child: Text(u))).toList(),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                   onChanged: (v) => setState(() {
                     fert.unit = v ?? '';
                     fert.isOtherUnit = v == 'Other (Manual)';
@@ -732,26 +545,15 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
           ),
           if (fert.isOtherUnit)
             TextField(
-<<<<<<< HEAD
               decoration: InputDecoration(hintText: AppLocalizations.of(context)!.enterCustomUnit),
-=======
-              decoration: const InputDecoration(hintText: 'Enter custom unit'),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
               onChanged: (v) => setState(() => fert.customUnit = v),
             ),
           const SizedBox(height: 8),
           DropdownButtonFormField<String>(
-<<<<<<< HEAD
             decoration: InputDecoration(labelText: AppLocalizations.of(context)!.frequency),
             isExpanded: true,
             initialValue: fert.frequency.isEmpty ? null : fert.frequency,
             items: frequencies.map((f) => DropdownMenuItem(value: f, child: Text(_getLocalizedValue(context, f)))).toList(),
-=======
-            decoration: const InputDecoration(labelText: 'Frequency'),
-            isExpanded: true,
-            initialValue: fert.frequency.isEmpty ? null : fert.frequency,
-            items: frequencies.map((f) => DropdownMenuItem(value: f, child: Text(f))).toList(),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
             onChanged: (v) => setState(() {
               fert.frequency = v ?? '';
               fert.isOtherFrequency = v == 'Other (Specify)';
@@ -759,11 +561,7 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
           ),
           if (fert.isOtherFrequency)
             TextField(
-<<<<<<< HEAD
               decoration: InputDecoration(hintText: AppLocalizations.of(context)!.specifyFrequency),
-=======
-              decoration: const InputDecoration(hintText: 'Specify frequency'),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
               onChanged: (v) => setState(() => fert.customFrequency = v),
             ),
         ],

@@ -6,11 +6,7 @@ import '../widgets/app_header.dart';
 import '../widgets/app_footer.dart';
 import '../widgets/floating_ivr.dart';
 
-<<<<<<< HEAD
 import 'package:farmaura/l10n/app_localizations.dart';
-
-=======
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
 class WhyThisCropScreen extends StatelessWidget {
   const WhyThisCropScreen({super.key, required this.appState});
   final AppState appState;
@@ -23,22 +19,14 @@ class WhyThisCropScreen extends StatelessWidget {
           children: [
             Column(
               children: [
-<<<<<<< HEAD
                 AppHeader(title: AppLocalizations.of(context)!.whyCropTitle('Cotton'), showBack: true, showProfile: false, appState: appState, onBack: () => Navigator.of(context).pop()),
-=======
-                AppHeader(title: 'Why Cotton?', showBack: true, showProfile: false, appState: appState, onBack: () => Navigator.of(context).pop()),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                 Expanded(
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 100),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-<<<<<<< HEAD
                         Text(AppLocalizations.of(context)!.whyCropSubtitle('cotton'), style: const TextStyle(color: AppColors.muted, fontSize: 14)),
-=======
-                        const Text('Here\'s why cotton is perfect for your farm', style: TextStyle(color: AppColors.muted, fontSize: 14)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                         const SizedBox(height: 20),
                         // Hero Card
                         Container(
@@ -56,28 +44,17 @@ class WhyThisCropScreen extends StatelessWidget {
                           child: Column(
                             children: [
                               const Text('95%', style: TextStyle(color: Colors.white, fontSize: 48, fontWeight: FontWeight.bold)),
-<<<<<<< HEAD
                               Text(AppLocalizations.of(context)!.suitabilityScore, style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600)),
-=======
-                              const Text('Suitability Score', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                               const SizedBox(height: 8),
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                                 decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(20)),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
-<<<<<<< HEAD
                                   children: [
                                     const Icon(Icons.check_circle, color: Colors.white, size: 16),
                                     const SizedBox(width: 6),
                                     Text(AppLocalizations.of(context)!.highlyRecommended, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)),
-=======
-                                  children: const [
-                                    Icon(Icons.check_circle, color: Colors.white, size: 16),
-                                    SizedBox(width: 6),
-                                    Text('Highly Recommended', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                                   ],
                                 ),
                               ),
@@ -85,7 +62,6 @@ class WhyThisCropScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 24),
-<<<<<<< HEAD
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(AppLocalizations.of(context)!.keyFactors, style: const TextStyle(color: AppColors.primaryDark, fontSize: 18, fontWeight: FontWeight.w700)),
@@ -93,66 +69,38 @@ class WhyThisCropScreen extends StatelessWidget {
                         const SizedBox(height: 16),
                         _FactorCard(
                           title: AppLocalizations.of(context)!.excellentSoilMatch,
-=======
-                        const Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text('Key Factors', style: TextStyle(color: AppColors.primaryDark, fontSize: 18, fontWeight: FontWeight.w700)),
-                        ),
-                        const SizedBox(height: 16),
-                        _FactorCard(
-                          title: 'Excellent Soil Match',
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                           description: 'Your loamy soil with pH 6.5 is perfect for cotton cultivation. The NPK ratio matches cotton requirements.',
                           icon: LucideIcons.sprout,
                           color: Colors.green,
                         ),
                         _FactorCard(
-<<<<<<< HEAD
                           title: AppLocalizations.of(context)!.weatherSuitability,
-=======
-                          title: 'Weather Suitability',
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                           description: 'Current temperature (28-32°C) and upcoming rainfall pattern are ideal for cotton sowing season.',
                           icon: Icons.wb_sunny_outlined,
                           color: Colors.orange,
                         ),
                         _FactorCard(
-<<<<<<< HEAD
                           title: AppLocalizations.of(context)!.rotationBenefit,
-=======
-                          title: 'Rotation Benefit',
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                           description: 'Cotton after wheat provides excellent crop rotation benefits, reducing pest pressure and improving soil health.',
                           icon: Icons.sync,
                           color: Colors.blue,
                         ),
                         _FactorCard(
-<<<<<<< HEAD
                           title: AppLocalizations.of(context)!.marketAdvantage,
-=======
-                          title: 'Market Advantage',
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                           description: 'Current cotton prices are ₹7,200/quintal with 12% upward trend. MSP support available at ₹6,620/quintal.',
                           icon: Icons.attach_money,
                           color: Colors.amber,
                         ),
                         const SizedBox(height: 24),
-<<<<<<< HEAD
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(AppLocalizations.of(context)!.growthTimeline, style: const TextStyle(color: AppColors.primaryDark, fontSize: 18, fontWeight: FontWeight.w700)),
-=======
-                        const Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text('Growth Timeline', style: TextStyle(color: AppColors.primaryDark, fontSize: 18, fontWeight: FontWeight.w700)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                         ),
                         const SizedBox(height: 16),
                         Container(
                           padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24)),
                           child: Column(
-<<<<<<< HEAD
                             children: [
                               _TimelineItem(title: AppLocalizations.of(context)!.sowing, time: 'Week 1-2', icon: LucideIcons.sprout, isFirst: true),
                               _TimelineItem(title: AppLocalizations.of(context)!.germination, time: 'Week 2-3', icon: LucideIcons.leaf),
@@ -160,15 +108,6 @@ class WhyThisCropScreen extends StatelessWidget {
                               _TimelineItem(title: AppLocalizations.of(context)!.flowering, time: 'Week 13-18', icon: LucideIcons.flower),
                               _TimelineItem(title: AppLocalizations.of(context)!.bollFormation, time: 'Week 19-24', icon: LucideIcons.bean),
                               _TimelineItem(title: AppLocalizations.of(context)!.harvest, time: 'Week 25-28', icon: LucideIcons.scissors, isLast: true),
-=======
-                            children: const [
-                              _TimelineItem(title: 'Sowing', time: 'Week 1-2', icon: LucideIcons.sprout, isFirst: true),
-                              _TimelineItem(title: 'Germination', time: 'Week 2-3', icon: LucideIcons.leaf),
-                              _TimelineItem(title: 'Vegetative', time: 'Week 4-12', icon: LucideIcons.wheat),
-                              _TimelineItem(title: 'Flowering', time: 'Week 13-18', icon: LucideIcons.flower),
-                              _TimelineItem(title: 'Boll Formation', time: 'Week 19-24', icon: LucideIcons.bean),
-                              _TimelineItem(title: 'Harvest', time: 'Week 25-28', icon: LucideIcons.scissors, isLast: true),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                             ],
                           ),
                         ),
@@ -188,17 +127,10 @@ class WhyThisCropScreen extends StatelessWidget {
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-<<<<<<< HEAD
                                   children: [
                                     Text(AppLocalizations.of(context)!.proTip, style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700)),
                                     const SizedBox(height: 4),
                                     const Text(
-=======
-                                  children: const [
-                                    Text('Pro Tip', style: TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700)),
-                                    SizedBox(height: 4),
-                                    Text(
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                                       'Ensure proper spacing of 2-3 feet between plants and maintain adequate irrigation during flowering stage for maximum yield.',
                                       style: TextStyle(color: AppColors.primaryDark, fontSize: 13, height: 1.4),
                                     ),
@@ -219,11 +151,7 @@ class WhyThisCropScreen extends StatelessWidget {
                                   side: const BorderSide(color: AppColors.primary),
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                                 ),
-<<<<<<< HEAD
                                 child: Text(AppLocalizations.of(context)!.backToResults, style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w600)),
-=======
-                                child: const Text('Back to Results', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.w600)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                               ),
                             ),
                             const SizedBox(width: 16),
@@ -236,11 +164,7 @@ class WhyThisCropScreen extends StatelessWidget {
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                                   elevation: 0,
                                 ),
-<<<<<<< HEAD
                                 child: Text(AppLocalizations.of(context)!.savePlan, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
-=======
-                                child: const Text('Save Plan', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                               ),
                             ),
                           ],

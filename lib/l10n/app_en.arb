@@ -360,5 +360,7 @@
   "enableLocation": "Enable Location",
   "locationRequiredMessage": "Please turn on your GPS location to get accurate weather and farm data.",
   "openSettings": "Open Settings",
-  "locationRequired": "Location Required"
+  "locationRequired": "Location Required",
+  "yield": "Yield",
+  "profit": "Profit"
 }

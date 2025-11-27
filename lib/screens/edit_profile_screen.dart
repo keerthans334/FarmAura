@@ -19,13 +19,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   late TextEditingController villageController;
 
   final occupations = const ['Farmer', 'Tenant Farmer', 'FPO Member', 'Other'];
-<<<<<<< HEAD
   final List<String> districts = ['Ranchi', 'Dhanbad', 'Hazaribagh', 'Bokaro'];
   final List<String> states = ['Jharkhand', 'Bihar', 'Odisha', 'West Bengal'];
-=======
-  final districts = const ['Ranchi', 'Dhanbad', 'Hazaribagh', 'Bokaro'];
-  final states = const ['Jharkhand', 'Bihar', 'Odisha', 'West Bengal'];
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
   final landSizes = const ['<1 Acre', '1-2 Acres', '2-5 Acres', '5-10 Acres', '>10 Acres'];
   final irrigationMethods = const ['Rainfed', 'Borewell', 'Canal', 'Drip', 'Sprinkler'];
 
@@ -45,7 +40,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     emailController = TextEditingController(text: user['email']?.toString() ?? '');
     villageController = TextEditingController(text: user['village']?.toString() ?? '');
     occupation = user['occupation']?.toString() ?? occupations.first;
-<<<<<<< HEAD
     
     final userDistrict = user['district']?.toString();
     if (userDistrict != null && userDistrict.isNotEmpty) {
@@ -66,11 +60,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     } else {
       state = states.first;
     }
-
-=======
-    district = user['district']?.toString().isNotEmpty == true ? user['district']?.toString() : districts.first;
-    state = user['state']?.toString().isNotEmpty == true ? user['state']?.toString() : states.first;
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
     landSize = farm['landSize']?.toString().isNotEmpty == true ? farm['landSize']?.toString() : landSizes[2];
     irrigation = farm['irrigation']?.toString().isNotEmpty == true ? farm['irrigation']?.toString() : irrigationMethods.first;
   }
@@ -97,11 +86,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               showBack: true,
               showProfile: false,
               appState: widget.appState,
-<<<<<<< HEAD
               onBack: () => Navigator.canPop(context) ? context.pop() : context.go('/profile'),
-=======
-              onBack: () => context.go('/profile'),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
             ),
             Expanded(
               child: SingleChildScrollView(
@@ -228,14 +213,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     });
 
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Profile updated successfully')));
-<<<<<<< HEAD
     if (Navigator.canPop(context)) {
       context.pop();
     } else {
       context.go('/profile');
     }
-=======
-    context.go('/profile');
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
   }
 }

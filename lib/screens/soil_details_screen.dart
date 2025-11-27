@@ -7,11 +7,7 @@ import '../widgets/app_header.dart';
 import '../widgets/app_footer.dart';
 import '../widgets/floating_ivr.dart';
 
-<<<<<<< HEAD
 import 'package:farmaura/l10n/app_localizations.dart';
-
-=======
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
 class SoilDetailsScreen extends StatelessWidget {
   const SoilDetailsScreen({super.key, required this.appState});
   final AppState appState;
@@ -19,7 +15,6 @@ class SoilDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final npkData = [
-<<<<<<< HEAD
       _Metric(AppLocalizations.of(context)!.nitrogen, 0.45, Colors.blue),
       _Metric(AppLocalizations.of(context)!.phosphorus, 0.38, Colors.purple),
       _Metric(AppLocalizations.of(context)!.potassium, 0.52, Colors.orange),
@@ -27,15 +22,6 @@ class SoilDetailsScreen extends StatelessWidget {
 
     final insights = [
       'Your soil is rich in organic matter', // TODO: Localize dynamic insights if possible or keep generic
-=======
-      _Metric('Nitrogen (N)', 0.45, Colors.blue),
-      _Metric('Phosphorus (P)', 0.38, Colors.purple),
-      _Metric('Potassium (K)', 0.52, Colors.orange),
-    ];
-
-    final insights = const [
-      'Your soil is rich in organic matter',
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
       'Consider adding phosphorus fertilizer',
       'pH level is ideal for most crops',
       'Good water retention capacity',
@@ -47,11 +33,7 @@ class SoilDetailsScreen extends StatelessWidget {
           children: [
             Column(
               children: [
-<<<<<<< HEAD
                 AppHeader(title: AppLocalizations.of(context)!.soilDetails, showBack: true, showProfile: false, appState: appState, onBack: () => Navigator.canPop(context) ? context.pop() : context.go('/dashboard')),
-=======
-                AppHeader(title: 'Soil Details', showBack: true, showProfile: false, appState: appState, onBack: () => context.go('/dashboard')),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                 Expanded(
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
@@ -70,13 +52,8 @@ class SoilDetailsScreen extends StatelessWidget {
                             children: [
                               const Icon(LucideIcons.sprout, size: 48, color: Colors.white),
                               const SizedBox(height: 6),
-<<<<<<< HEAD
                               Text(AppLocalizations.of(context)!.soilStatusGood, style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600)),
                               Text(AppLocalizations.of(context)!.basedOnRegion(appState.location['district']), style: const TextStyle(color: Colors.white70)),
-=======
-                              const Text('Soil Status: Good', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600)),
-                              Text('Based on ${appState.location['district']} region', style: const TextStyle(color: Colors.white70)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                             ],
                           ),
                         ),
@@ -118,7 +95,6 @@ class SoilDetailsScreen extends StatelessWidget {
                           decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(18), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 8))]),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-<<<<<<< HEAD
                             children: [
                               Text(AppLocalizations.of(context)!.soilProperties, style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w600)),
                               const SizedBox(height: 8),
@@ -127,16 +103,6 @@ class SoilDetailsScreen extends StatelessWidget {
                               _PropRow(label: AppLocalizations.of(context)!.moisture, value: '68%'),
                               _PropRow(label: AppLocalizations.of(context)!.organicMatter, value: '4.2%'),
                               _PropRow(label: AppLocalizations.of(context)!.ecSalinity, value: '0.8 dS/m'),
-=======
-                            children: const [
-                              Text('Soil Properties', style: TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w600)),
-                              SizedBox(height: 8),
-                              _PropRow(label: 'Soil Type', value: 'Loamy'),
-                              _PropRow(label: 'pH Level', value: '6.5 (Neutral)'),
-                              _PropRow(label: 'Moisture', value: '68%'),
-                              _PropRow(label: 'Organic Matter', value: '4.2%'),
-                              _PropRow(label: 'EC (Salinity)', value: '0.8 dS/m'),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                             ],
                           ),
                         ),
@@ -147,11 +113,7 @@ class SoilDetailsScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-<<<<<<< HEAD
                               Text(AppLocalizations.of(context)!.soilInsights, style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w600)),
-=======
-                              const Text('Soil Insights', style: TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w600)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                               const SizedBox(height: 8),
                               SizedBox(
                                 height: 130,
@@ -181,11 +143,7 @@ class SoilDetailsScreen extends StatelessWidget {
                               backgroundColor: AppColors.primary,
                               foregroundColor: Colors.white,
                             ),
-<<<<<<< HEAD
                             child: Text(AppLocalizations.of(context)!.requestSoilTest),
-=======
-                            child: const Text('Request Soil Test'),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                           ),
                         ),
                       ],

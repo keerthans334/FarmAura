@@ -73,11 +73,7 @@ class _FarmDetailsScreenState extends State<FarmDetailsScreen> {
               showBack: true,
               showProfile: false,
               appState: widget.appState,
-<<<<<<< HEAD
               onBack: () => Navigator.canPop(context) ? context.pop() : context.go('/profile'),
-=======
-              onBack: () => context.go('/profile'),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
             ),
             Expanded(
               child: SingleChildScrollView(
@@ -359,14 +355,10 @@ class _FarmDetailsScreenState extends State<FarmDetailsScreen> {
     });
 
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Farm details updated')));
-<<<<<<< HEAD
     if (Navigator.canPop(context)) {
       context.pop();
     } else {
       context.go('/profile');
     }
-=======
-    context.go('/profile');
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
   }
 }

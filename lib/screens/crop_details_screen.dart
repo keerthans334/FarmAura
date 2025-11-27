@@ -7,11 +7,7 @@ import '../widgets/app_header.dart';
 import '../widgets/app_footer.dart';
 import '../widgets/floating_ivr.dart';
 
-<<<<<<< HEAD
 import 'package:farmaura/l10n/app_localizations.dart';
-
-=======
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
 class CropDetailsScreen extends StatelessWidget {
   const CropDetailsScreen({super.key, required this.appState});
   final AppState appState;
@@ -24,11 +20,7 @@ class CropDetailsScreen extends StatelessWidget {
           children: [
             Column(
               children: [
-<<<<<<< HEAD
                 AppHeader(title: AppLocalizations.of(context)!.cropDetails, showBack: true, showProfile: false, appState: appState),
-=======
-                AppHeader(title: 'Crop Details', showBack: true, showProfile: false, appState: appState),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                 Expanded(
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 100),
@@ -62,7 +54,6 @@ class CropDetailsScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(width: 16),
                                   Column(
-<<<<<<< HEAD
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(AppLocalizations.of(context)!.cotton, style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold)),
@@ -163,108 +154,6 @@ class CropDetailsScreen extends StatelessWidget {
                               ],
                             ),
                           ),
-=======
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: const [
-                                      Text('Cotton', style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold)),
-                                      Text('Excellent soil match', style: TextStyle(color: Colors.white70, fontSize: 14)),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 24),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: const [
-                                  Text('Suitability Score', style: TextStyle(color: Colors.white, fontSize: 14)),
-                                  Text('95%', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
-                                ],
-                              ),
-                              const SizedBox(height: 8),
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(4),
-                                child: LinearProgressIndicator(
-                                  value: 0.95,
-                                  backgroundColor: Colors.white.withOpacity(0.3),
-                                  color: Colors.white,
-                                  minHeight: 8,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        // Stats Row
-                        Row(
-                          children: [
-                            Expanded(child: _StatCard(label: 'Expected Profit', value: '₹85,000', subLabel: 'per acre', icon: Icons.attach_money)),
-                            const SizedBox(width: 16),
-                            Expanded(child: _StatCard(label: 'Yield Estimate', value: '18-20 quintals/acre', icon: LucideIcons.trendingUp)),
-                          ],
-                        ),
-                        const SizedBox(height: 24),
-                        // Growing Requirements
-                        const Text('Growing Requirements', style: TextStyle(color: AppColors.primaryDark, fontSize: 20, fontWeight: FontWeight.bold)),
-                        const SizedBox(height: 16),
-                        _RequirementItem(icon: LucideIcons.calendar, label: 'Growing Period', value: '150-180 days'),
-                        _RequirementItem(icon: LucideIcons.droplets, label: 'Water Requirement', value: 'Medium (600-700mm)'),
-                        _RequirementItem(icon: LucideIcons.sun, label: 'Temperature Range', value: '21-30°C'),
-                        _RequirementItem(icon: LucideIcons.globe, label: 'Soil Type', value: 'Black cotton soil, Red soil'),
-                        _RequirementItem(icon: LucideIcons.flaskConical, label: 'pH Range', value: '6.0-7.5 (Slightly acidic to neutral)'),
-                        _RequirementItem(icon: LucideIcons.cloudRain, label: 'Rainfall', value: '600-1200mm annually'),
-
-                        const SizedBox(height: 24),
-                        // Growing Stages
-                        const Text('Growing Stages', style: TextStyle(color: AppColors.primaryDark, fontSize: 20, fontWeight: FontWeight.bold)),
-                        const SizedBox(height: 16),
-                        _StageItem(icon: LucideIcons.sprout, title: 'Sowing', days: '0-15 days', description: 'Seed treatment, Land preparation'),
-                        _StageItem(icon: LucideIcons.leaf, title: 'Vegetative', days: '15-60 days', description: 'Irrigation, Weeding, First fertilizer dose'),
-                        _StageItem(icon: LucideIcons.flower, title: 'Flowering', days: '60-90 days', description: 'Pest control, Second fertilizer dose'),
-                        _StageItem(icon: LucideIcons.wheat, title: 'Boll Formation', days: '90-120 days', description: 'Regular monitoring, Adequate water supply'),
-                        _StageItem(icon: LucideIcons.hand, title: 'Harvesting', days: '150-180 days', description: 'Hand picking when bolls open', isLast: true),
-
-                        const SizedBox(height: 24),
-                        // Fertilizer Plan
-                        const Text('Stage-wise Fertilizer Plan', style: TextStyle(color: AppColors.primaryDark, fontSize: 20, fontWeight: FontWeight.bold)),
-                        const SizedBox(height: 16),
-                        _PlanCard(title: 'Basal (At sowing)', day: 'Day 0', item: 'DAP', quantity: '50 kg/acre'),
-                        _PlanCard(title: 'First dose', day: 'Day 30', item: 'Urea', quantity: '25 kg/acre'),
-                        _PlanCard(title: 'Second dose', day: 'Day 60', item: 'NPK (19:19:19)', quantity: '30 kg/acre'),
-                        _PlanCard(title: 'Third dose', day: 'Day 90', item: 'Potash', quantity: '20 kg/acre'),
-
-                        const SizedBox(height: 24),
-                        // Irrigation Schedule
-                        const Text('Irrigation Schedule', style: TextStyle(color: AppColors.primaryDark, fontSize: 20, fontWeight: FontWeight.bold)),
-                        const SizedBox(height: 16),
-                        _PlanCard(title: 'Sowing to germination', day: 'Days 0-10', item: 'Light irrigation', quantity: '20mm', isGreen: true),
-                        _PlanCard(title: 'Vegetative growth', day: 'Days 15-60', item: 'Every 7-10 days', quantity: '40-50mm per irrigation', isGreen: true),
-                        _PlanCard(title: 'Flowering', day: 'Days 60-90', item: 'Every 5-7 days', quantity: '50-60mm per irrigation', isGreen: true),
-                        _PlanCard(title: 'Boll development', day: 'Days 90-150', item: 'Every 7-10 days', quantity: '40-50mm per irrigation', isGreen: true),
-
-                        const SizedBox(height: 24),
-                        // Market Information
-                        Container(
-                          padding: const EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            color: Colors.amber,
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text('Market Information', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-                              const SizedBox(height: 20),
-                              _MarketRow(label: 'Current Price:', value: '₹6,500/quintal'),
-                              _MarketRow(label: 'Market Trend:', value: 'Stable'),
-                              _MarketRow(label: 'Demand:', value: 'High'),
-                              const SizedBox(height: 16),
-                              const Text('Major Buyers:', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                              const SizedBox(height: 4),
-                              const Text('Textile mills, Export market', style: TextStyle(color: Colors.white, fontSize: 14)),
-                            ],
-                          ),
-                        ),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
 
                         const SizedBox(height: 24),
                         // Footer Buttons
@@ -278,11 +167,7 @@ class CropDetailsScreen extends StatelessWidget {
                                   side: const BorderSide(color: AppColors.primary),
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                                 ),
-<<<<<<< HEAD
                                 child: Text(AppLocalizations.of(context)!.tryDifferentInputs, style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w600)),
-=======
-                                child: const Text('Try Different Inputs', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.w600)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                               ),
                             ),
                             const SizedBox(width: 16),
@@ -295,11 +180,7 @@ class CropDetailsScreen extends StatelessWidget {
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                                   elevation: 0,
                                 ),
-<<<<<<< HEAD
                                 child: Text(AppLocalizations.of(context)!.viewMarketPrices, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
-=======
-                                child: const Text('View Market Prices', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                               ),
                             ),
                           ],

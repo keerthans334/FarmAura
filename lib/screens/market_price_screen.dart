@@ -9,11 +9,7 @@ import '../widgets/app_header.dart';
 import '../widgets/app_footer.dart';
 import '../widgets/floating_ivr.dart';
 
-<<<<<<< HEAD
 import 'package:farmaura/l10n/app_localizations.dart';
-
-=======
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
 class MarketPriceScreen extends StatefulWidget {
   const MarketPriceScreen({super.key, required this.appState});
   final AppState appState;
@@ -47,11 +43,7 @@ class _MarketPriceScreenState extends State<MarketPriceScreen> {
 
   Widget _updatedCard() {
     final now = DateTime.now();
-<<<<<<< HEAD
     final timeText = '${AppLocalizations.of(context)!.today}, ${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
-=======
-    final timeText = 'Today, ${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -64,11 +56,7 @@ class _MarketPriceScreenState extends State<MarketPriceScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-<<<<<<< HEAD
               Text(AppLocalizations.of(context)!.updated, style: const TextStyle(color: Colors.white70, fontSize: 12)),
-=======
-              const Text('Updated', style: TextStyle(color: Colors.white70, fontSize: 12)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
               Text(timeText, style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600)),
             ],
           ),
@@ -103,11 +91,7 @@ class _MarketPriceScreenState extends State<MarketPriceScreen> {
             children: [
               Expanded(
                 child: Text(
-<<<<<<< HEAD
                   AppLocalizations.of(context)!.bestMandi(price.cropName),
-=======
-                  'Best Mandi To Sell – ${price.cropName}',
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                   style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -133,15 +117,9 @@ class _MarketPriceScreenState extends State<MarketPriceScreen> {
           const SizedBox(height: 12),
           Row(
             children: [
-<<<<<<< HEAD
               _infoChip(AppLocalizations.of(context)!.sellingPrice, '${_formatPrice(price.currentPrice)}/quintal', Colors.green.shade50, AppColors.primaryDark),
               const SizedBox(width: 10),
               _infoChip(AppLocalizations.of(context)!.transportCost, _formatPrice(transportCost), Colors.orange.shade50, Colors.orange.shade800),
-=======
-              _infoChip('Selling Price', '${_formatPrice(price.currentPrice)}/quintal', Colors.green.shade50, AppColors.primaryDark),
-              const SizedBox(width: 10),
-              _infoChip('Transport Cost', _formatPrice(transportCost), Colors.orange.shade50, Colors.orange.shade800),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
             ],
           ),
           const SizedBox(height: 14),
@@ -151,11 +129,7 @@ class _MarketPriceScreenState extends State<MarketPriceScreen> {
               padding: const EdgeInsets.symmetric(vertical: 14),
               decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(16)),
               alignment: Alignment.center,
-<<<<<<< HEAD
               child: Text('${AppLocalizations.of(context)!.estimatedNetProfit} ${_formatPrice(estimatedProfit)}', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
-=======
-              child: Text('Estimated Net Profit ${_formatPrice(estimatedProfit)}', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
             ),
           ),
         ],
@@ -185,11 +159,7 @@ class _MarketPriceScreenState extends State<MarketPriceScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-<<<<<<< HEAD
         Text(AppLocalizations.of(context)!.allMarketPrices, style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700, fontSize: 16)),
-=======
-        const Text('All Market Prices', style: TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700, fontSize: 16)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
         const SizedBox(height: 12),
         ListView.separated(
           itemCount: prices.length,
@@ -207,15 +177,11 @@ class _MarketPriceScreenState extends State<MarketPriceScreen> {
 
   List<Widget> _bestMandiSection(List<MarketPrice> prices) {
     if (prices.isEmpty) return [];
-<<<<<<< HEAD
     final labels = [
       AppLocalizations.of(context)!.recommended,
       AppLocalizations.of(context)!.alsoGoodOption,
       AppLocalizations.of(context)!.alternativeMandi
     ];
-=======
-    final labels = ['Recommended', 'Also good option', 'Alternative mandi'];
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
     final limited = prices.take(3).toList();
     return List.generate(
       limited.length,
@@ -234,17 +200,12 @@ class _MarketPriceScreenState extends State<MarketPriceScreen> {
           children: [
             Column(
               children: [
-<<<<<<< HEAD
                 AppHeader(title: AppLocalizations.of(context)!.marketPrices, showBack: true, showProfile: false, appState: widget.appState, onBack: () => Navigator.canPop(context) ? context.pop() : context.go('/dashboard')),
-=======
-                AppHeader(title: 'Market Prices', showBack: true, showProfile: false, appState: widget.appState, onBack: () => context.go('/dashboard')),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                 Expanded(
                   child: FutureBuilder<List<MarketPrice>>(
                     future: _pricesFuture,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-<<<<<<< HEAD
                         return Center(
                           child: Padding(
                             padding: const EdgeInsets.all(16),
@@ -254,17 +215,6 @@ class _MarketPriceScreenState extends State<MarketPriceScreen> {
                                 const CircularProgressIndicator(),
                                 const SizedBox(height: 12),
                                 Text(AppLocalizations.of(context)!.fetchingPrices),
-=======
-                        return const Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(16),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                CircularProgressIndicator(),
-                                SizedBox(height: 12),
-                                Text('Fetching latest mandi prices...'),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                               ],
                             ),
                           ),
@@ -275,26 +225,16 @@ class _MarketPriceScreenState extends State<MarketPriceScreen> {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-<<<<<<< HEAD
                               Text(AppLocalizations.of(context)!.couldNotLoadPrices),
                               const SizedBox(height: 8),
                               ElevatedButton(onPressed: _retry, child: Text(AppLocalizations.of(context)!.retry)),
-=======
-                              const Text('Could not load prices'),
-                              const SizedBox(height: 8),
-                              ElevatedButton(onPressed: _retry, child: const Text('Retry')),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                             ],
                           ),
                         );
                       }
                       final prices = snapshot.data ?? [];
                       if (prices.isEmpty) {
-<<<<<<< HEAD
                         return Center(child: Text(AppLocalizations.of(context)!.noPricesAvailable));
-=======
-                        return const Center(child: Text('No prices available right now'));
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                       }
                       final bestList = _pickTop(prices);
                       return SingleChildScrollView(
@@ -303,15 +243,9 @@ class _MarketPriceScreenState extends State<MarketPriceScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(height: 8),
-<<<<<<< HEAD
                             Text(AppLocalizations.of(context)!.marketPrices, style: const TextStyle(color: AppColors.primaryDark, fontSize: 20, fontWeight: FontWeight.w700)),
                             const SizedBox(height: 4),
                             Text(AppLocalizations.of(context)!.livePrices, style: const TextStyle(color: AppColors.muted)),
-=======
-                            const Text('Market Prices', style: TextStyle(color: AppColors.primaryDark, fontSize: 20, fontWeight: FontWeight.w700)),
-                            const SizedBox(height: 4),
-                            const Text('Live prices from nearby mandis', style: TextStyle(color: AppColors.muted)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                             const SizedBox(height: 16),
                             _updatedCard(),
                             const SizedBox(height: 20),

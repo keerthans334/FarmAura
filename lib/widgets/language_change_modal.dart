@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-<<<<<<< HEAD
 import 'package:farmaura/l10n/app_localizations.dart';
-=======
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
 import '../models/app_state.dart';
 import '../theme/app_theme.dart';
 
@@ -58,7 +55,6 @@ class _LanguageChangeModalState extends State<LanguageChangeModal> {
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-<<<<<<< HEAD
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,18 +65,6 @@ class _LanguageChangeModalState extends State<LanguageChangeModal> {
                     ],
                   ),
                   const CircleAvatar(
-=======
-                children: const [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Change Language', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700)),
-                      SizedBox(height: 4),
-                      Text('Select your preferred language', style: TextStyle(color: Colors.white70, fontSize: 12)),
-                    ],
-                  ),
-                  CircleAvatar(
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                     backgroundColor: Colors.white24,
                     child: Icon(LucideIcons.x, color: Colors.white),
                   ),
@@ -149,11 +133,7 @@ class _LanguageChangeModalState extends State<LanguageChangeModal> {
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                         side: const BorderSide(color: AppColors.border, width: 2),
                       ),
-<<<<<<< HEAD
                       child: Text(AppLocalizations.of(context)!.cancel, style: const TextStyle(color: AppColors.muted)),
-=======
-                      child: const Text('Cancel', style: TextStyle(color: AppColors.muted)),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -169,11 +149,7 @@ class _LanguageChangeModalState extends State<LanguageChangeModal> {
                         backgroundColor: AppColors.primary,
                         foregroundColor: Colors.white,
                       ),
-<<<<<<< HEAD
                       child: Text(AppLocalizations.of(context)!.apply),
-=======
-                      child: const Text('Apply'),
->>>>>>> 9d011e077f24875d0231af6f5ff886e1b4e6eeee
                     ),
                   ),
                 ],
