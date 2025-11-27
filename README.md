@@ -1,4 +1,4 @@
-# farmaura
+# FarmAura
 
 A new Flutter project.
 
