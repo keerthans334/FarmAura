@@ -1,0 +1,45 @@
+name: farmaura
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  go_router: ^14.2.7
+  google_fonts: ^6.2.1
+  flutter_svg: ^2.0.10+1
+  provider: ^6.1.2
+  lucide_icons: ^0.257.0
+  speech_to_text: ^7.3.0
+  http: ^1.2.1
+  cupertino_icons: ^1.0.8
+  webview_flutter: ^4.8.0
+  url_launcher: ^6.3.0
+  geolocator: ^13.0.1
+  location: ^7.0.0
+  geocoding: ^3.0.0
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.20.2
+  shared_preferences: ^2.3.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  generate: true
+  assets:
+    - assets/icons/
+    - assets/icons/occupation/
+    - assets/icons/location/
+    - assets/icons/irrigation/
+    - assets/images/
+    - assets/data/

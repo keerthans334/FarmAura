@@ -1,0 +1,543 @@
+﻿import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
+import 'package:lucide_icons/lucide_icons.dart';
+import '../models/app_state.dart';
+import '../theme/app_theme.dart';
+import '../widgets/app_header.dart';
+import '../widgets/app_footer.dart';
+import '../widgets/floating_ivr.dart';
+
+class CombinedInputScreen extends StatefulWidget {
+  const CombinedInputScreen({super.key, required this.appState});
+  final AppState appState;
+
+  @override
+  State<CombinedInputScreen> createState() => _CombinedInputScreenState();
+}
+
+class _CombinedInputScreenState extends State<CombinedInputScreen> {
+  String soilInputMode = 'auto';
+  String landSize = '';
+  String irrigation = '';
+  String soilType = '';
+  String texture = '';
+  double ph = 7;
+  String lastCrop = '';
+  String frequentCrop = '';
+
+  final landSizes = const ['< 1 Acre', '1-2 Acres', '2-5 Acres', '5-10 Acres', '> 10 Acres', 'Other (Manual)'];
+  final irrigationTypes = const ['Rainfed', 'Canal', 'Borewell', 'Drip', 'Other (Manual)'];
+  final soilTypes = const ['Sandy', 'Loamy', 'Clay', 'Red', 'Black', 'Other (Manual)'];
+  final soilTextures = const ['Fine', 'Medium', 'Coarse', 'Other (Manual)'];
+  final crops = const ['Wheat', 'Rice', 'Cotton', 'Sugarcane', 'Soybean', 'Maize', 'Tomato', 'Potato', 'Other (Manual)'];
+  final fertilizersList = const ['Urea', 'DAP', 'NPK', 'Organic Manure', 'None', 'Other (Manual)'];
+  final units = const ['kg', 'g', 'L', 'mL', 'Bags', 'Other (Manual)'];
+  final frequencies = const ['Weekly', 'Monthly', 'Per Stage', 'Other (Specify)'];
+
+  Map<String, String> customInputs = {
+    'landSize': '',
+    'irrigation': '',
+    'soilType': '',
+    'texture': '',
+    'lastCrop': '',
+    'previousCrop': '',
+  };
+
+  List<FertilizerEntry> fertilizers = [FertilizerEntry(id: '1')];
+
+  bool get isValid {
+    final effectiveLandSize = landSize == 'Other (Manual)' ? customInputs['landSize']! : landSize;
+    final effectiveIrrigation = irrigation == 'Other (Manual)' ? customInputs['irrigation']! : irrigation;
+    final effectiveLastCrop = lastCrop == 'Other (Manual)' ? customInputs['lastCrop']! : lastCrop;
+    final effectivePreviousCrop = frequentCrop == 'Other (Manual)' ? customInputs['previousCrop']! : frequentCrop;
+
+    final requiredFields = [effectiveLandSize, effectiveIrrigation, effectiveLastCrop, effectivePreviousCrop];
+
+    if (soilInputMode == 'manual') {
+      final effectiveSoilType = soilType == 'Other (Manual)' ? customInputs['soilType']! : soilType;
+      final effectiveTexture = texture == 'Other (Manual)' ? customInputs['texture']! : texture;
+      requiredFields.addAll([effectiveSoilType, effectiveTexture]);
+    }
+
+    return requiredFields.every((e) => e.isNotEmpty);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      bottomNavigationBar: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: isValid ? () => context.go('/crop-results') : null,
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    disabledBackgroundColor: Colors.grey.shade300,
+                  ),
+                  child: const Text('Get Recommendation'),
+                ),
+              ),
+              if (!isValid)
+                const Padding(
+                  padding: EdgeInsets.only(top: 6),
+                  child: Text('Please fill all required fields to continue', style: TextStyle(color: AppColors.muted, fontSize: 12)),
+                ),
+            ],
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                AppHeader(title: 'Crop Input', showBack: true, showProfile: false, appState: widget.appState),
+                Expanded(
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      return SingleChildScrollView(
+                        padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                          child: IntrinsicHeight(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Crop Advisory Form', style: Theme.of(context).textTheme.headlineSmall),
+                                const SizedBox(height: 4),
+                                const Text('Fill details for personalized recommendations', style: TextStyle(color: AppColors.muted)),
+                                const SizedBox(height: 12),
+                                _sectionCard(
+                                  title: 'Section A - Farm Details',
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      const Text('Land Size', style: TextStyle(color: AppColors.muted)),
+                                      const SizedBox(height: 6),
+                                      Wrap(
+                                        spacing: 8,
+                                        runSpacing: 8,
+                                        children: landSizes
+                                            .map((size) => ChoiceChip(
+                                                  label: Text(size),
+                                                  selected: landSize == size,
+                                                  onSelected: (_) => setState(() => landSize = size),
+                                                  selectedColor: AppColors.primary,
+                                                  labelStyle: TextStyle(color: landSize == size ? Colors.white : AppColors.primaryDark),
+                                                ))
+                                            .toList(),
+                                      ),
+                                      if (landSize == 'Other (Manual)')
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 8),
+                                          child: TextField(
+                                            decoration: const InputDecoration(hintText: 'Enter land size'),
+                                            onChanged: (v) => setState(() => customInputs['landSize'] = v),
+                                          ),
+                                        ),
+                                      const SizedBox(height: 12),
+                                      const Text('Irrigation Type', style: TextStyle(color: AppColors.muted)),
+                                      const SizedBox(height: 6),
+                                      Wrap(
+                                        spacing: 8,
+                                        runSpacing: 8,
+                                        children: irrigationTypes
+                                            .map((type) => ChoiceChip(
+                                                  label: Text(type),
+                                                  selected: irrigation == type,
+                                                  onSelected: (_) => setState(() => irrigation = type),
+                                                  selectedColor: AppColors.primary,
+                                                  labelStyle: TextStyle(color: irrigation == type ? Colors.white : AppColors.primaryDark),
+                                                ))
+                                            .toList(),
+                                      ),
+                                      if (irrigation == 'Other (Manual)')
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: 8),
+                                          child: TextField(
+                                            decoration: const InputDecoration(hintText: 'Enter irrigation type'),
+                                            onChanged: (v) => setState(() => customInputs['irrigation'] = v),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 12),
+                                _sectionCard(
+                                  title: 'Section B - Soil Information',
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(12),
+                                        decoration: BoxDecoration(color: const Color(0xFFE8F5E9), borderRadius: BorderRadius.circular(16)),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            const Text('Choose Input Method:', style: TextStyle(color: AppColors.primaryDark, fontSize: 13)),
+                                            const SizedBox(height: 8),
+                                            Row(
+                                              children: [
+                                                _modeButton('auto', 'Auto-detect', LucideIcons.navigation),
+                                                const SizedBox(width: 8),
+                                                _modeButton('manual', 'Manual', LucideIcons.edit),
+                                                const SizedBox(width: 8),
+                                                _modeButton('shc', 'SHC', LucideIcons.upload),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(height: 12),
+                                      if (soilInputMode == 'auto')
+                                        Container(
+                                          padding: const EdgeInsets.all(12),
+                                          decoration: BoxDecoration(color: Colors.blue.shade50, borderRadius: BorderRadius.circular(16), border: Border.all(color: Colors.blue.shade200)),
+                                          child: Text('?? Location: ${widget.appState.location['district']}, ${widget.appState.location['state']}',
+                                              style: const TextStyle(color: AppColors.primaryDark)),
+                                        ),
+                                      if (soilInputMode == 'manual') ...[
+                                        DropdownButtonFormField<String>(
+                                          decoration: const InputDecoration(labelText: 'Soil Type'),
+                                          value: soilType.isEmpty ? null : soilType,
+                                          items: soilTypes.map((t) => DropdownMenuItem(value: t, child: Text(t))).toList(),
+                                          onChanged: (v) => setState(() => soilType = v ?? ''),
+                                        ),
+                                        if (soilType == 'Other (Manual)')
+                                          TextField(
+                                            decoration: const InputDecoration(hintText: 'Enter soil type'),
+                                            onChanged: (v) => setState(() => customInputs['soilType'] = v),
+                                          ),
+                                        const SizedBox(height: 12),
+                                        const Text('Soil Texture', style: TextStyle(color: AppColors.muted)),
+                                        const SizedBox(height: 6),
+                                        Wrap(
+                                          spacing: 8,
+                                          runSpacing: 8,
+                                          children: soilTextures
+                                              .map((t) => ChoiceChip(
+                                                    label: Text(t),
+                                                    selected: texture == t,
+                                                    onSelected: (_) => setState(() => texture = t),
+                                                    selectedColor: AppColors.primary,
+                                                    labelStyle: TextStyle(color: texture == t ? Colors.white : AppColors.primaryDark),
+                                                  ))
+                                              .toList(),
+                                        ),
+                                        if (texture == 'Other (Manual)')
+                                          Padding(
+                                            padding: const EdgeInsets.only(top: 8),
+                                            child: TextField(
+                                              decoration: const InputDecoration(hintText: 'Enter soil texture'),
+                                              onChanged: (v) => setState(() => customInputs['texture'] = v),
+                                            ),
+                                          ),
+                                        const SizedBox(height: 12),
+                                        Text('pH Level: ${ph.toStringAsFixed(1)}', style: const TextStyle(color: AppColors.muted)),
+                                        Slider(
+                                          value: ph,
+                                          min: 4,
+                                          max: 10,
+                                          divisions: 60,
+                                          activeColor: AppColors.primary,
+                                          onChanged: (v) => setState(() => ph = v),
+                                        ),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: const [
+                                            Text('Acidic (4)', style: TextStyle(color: AppColors.muted, fontSize: 12)),
+                                            Text('Neutral (7)', style: TextStyle(color: AppColors.muted, fontSize: 12)),
+                                            Text('Alkaline (10)', style: TextStyle(color: AppColors.muted, fontSize: 12)),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 12),
+                                        Row(
+                                          children: const [
+                                            Expanded(child: _MiniInput(label: 'Nitrogen (N)', hint: '0-100')),
+                                            SizedBox(width: 8),
+                                            Expanded(child: _MiniInput(label: 'Phosphorus (P)', hint: '0-100')),
+                                            SizedBox(width: 8),
+                                            Expanded(child: _MiniInput(label: 'Potassium (K)', hint: '0-100')),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 12),
+                                        const _MiniInput(label: 'Soil Moisture (%)', hint: 'Enter moisture percentage'),
+                                      ],
+                                      if (soilInputMode == 'shc')
+                                        Container(
+                                          padding: const EdgeInsets.all(12),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(16),
+                                            border: Border.all(color: AppColors.primary, width: 2),
+                                            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 8))],
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                width: double.infinity,
+                                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                                decoration: BoxDecoration(
+                                                  gradient: const LinearGradient(colors: [AppColors.primary, AppColors.primaryDark]),
+                                                  borderRadius: BorderRadius.circular(18),
+                                                  border: Border.all(color: AppColors.accent, width: 3),
+                                                ),
+                                                child: Column(
+                                                  children: const [
+                                                    Text('??', style: TextStyle(fontSize: 24, color: Colors.white)),
+                                                    SizedBox(height: 6),
+                                                    Text('Upload Soil Health Card', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+                                                    SizedBox(height: 2),
+                                                    Text('Recommended for accurate results', style: TextStyle(color: Colors.white70, fontSize: 12)),
+                                                  ],
+                                                ),
+                                              ),
+                                              const SizedBox(height: 12),
+                                              const _MiniInput(label: 'SHC Number', hint: 'Enter SHC number'),
+                                              const SizedBox(height: 8),
+                                              const _MiniInput(label: 'Test Date', hint: 'YYYY-MM-DD'),
+                                            ],
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 12),
+                                _sectionCard(
+                                  title: 'Section C - Past Crop Rotation',
+                                  child: Column(
+                                    children: [
+                                      DropdownButtonFormField<String>(
+                                        decoration: const InputDecoration(labelText: 'Last Crop Grown'),
+                                        value: lastCrop.isEmpty ? null : lastCrop,
+                                        items: crops.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
+                                        onChanged: (v) => setState(() => lastCrop = v ?? ''),
+                                      ),
+                                      if (lastCrop == 'Other (Manual)')
+                                        TextField(
+                                          decoration: const InputDecoration(hintText: 'Enter last crop'),
+                                          onChanged: (v) => setState(() => customInputs['lastCrop'] = v),
+                                        ),
+                                      const SizedBox(height: 12),
+                                      DropdownButtonFormField<String>(
+                                        decoration: const InputDecoration(labelText: 'Frequent Crop'),
+                                        value: frequentCrop.isEmpty ? null : frequentCrop,
+                                        items: crops.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
+                                        onChanged: (v) => setState(() => frequentCrop = v ?? ''),
+                                      ),
+                                      if (frequentCrop == 'Other (Manual)')
+                                        TextField(
+                                          decoration: const InputDecoration(hintText: 'Enter frequent crop'),
+                                          onChanged: (v) => setState(() => customInputs['previousCrop'] = v),
+                                        ),
+                                      const SizedBox(height: 12),
+                                      const Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text('Fertilizer Details', style: TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w600)),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      ...fertilizers.map((fert) => _fertilizerCard(fert)).toList(),
+                                      const SizedBox(height: 8),
+                                      ElevatedButton.icon(
+                                        onPressed: () => setState(() => fertilizers.add(FertilizerEntry(id: (fertilizers.length + 1).toString()))),
+                                        icon: const Icon(LucideIcons.plus),
+                                        label: const Text('Add Fertilizer'),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: AppColors.primary,
+                                          foregroundColor: Colors.white,
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                          padding: const EdgeInsets.symmetric(vertical: 14),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 24),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+            const Positioned(bottom: 0, left: 0, right: 0, child: AppFooter()),
+            const FloatingIVR(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _modeButton(String mode, String label, IconData icon) {
+    final active = soilInputMode == mode;
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => setState(() => soilInputMode = mode),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 160),
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          decoration: BoxDecoration(
+            color: active ? AppColors.primary : Colors.white,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: AppColors.primary, width: 2),
+          ),
+          child: Column(
+            children: [
+              Icon(icon, size: 18, color: active ? Colors.white : AppColors.primaryDark),
+              const SizedBox(height: 4),
+              Text(label, style: TextStyle(color: active ? Colors.white : AppColors.primaryDark, fontSize: 12)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _sectionCard({required String title, required Widget child}) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 12, offset: const Offset(0, 10))],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title, style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700)),
+          const SizedBox(height: 10),
+          child,
+        ],
+      ),
+    );
+  }
+
+  Widget _fertilizerCard(FertilizerEntry fert) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: AppColors.background,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.primary, width: 2),
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Fertilizer ${fert.id}', style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w600)),
+              if (fertilizers.length > 1)
+                IconButton(
+                  onPressed: () => setState(() => fertilizers.removeWhere((f) => f.id == fert.id)),
+                  icon: const Icon(LucideIcons.x, color: Colors.red),
+                ),
+            ],
+          ),
+          DropdownButtonFormField<String>(
+            decoration: const InputDecoration(labelText: 'Select fertilizer'),
+            value: fert.fertilizer.isEmpty ? null : fert.fertilizer,
+            items: fertilizersList.map((f) => DropdownMenuItem(value: f, child: Text(f))).toList(),
+            onChanged: (v) => setState(() {
+              fert.fertilizer = v ?? '';
+              fert.isOther = v == 'Other (Manual)';
+            }),
+          ),
+          if (fert.isOther)
+            TextField(
+              decoration: const InputDecoration(hintText: 'Enter fertilizer name'),
+              onChanged: (v) => setState(() => fert.customFertilizer = v),
+            ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  decoration: const InputDecoration(labelText: 'Quantity'),
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  onChanged: (v) => setState(() => fert.quantity = v),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: DropdownButtonFormField<String>(
+                  decoration: const InputDecoration(labelText: 'Unit'),
+                  value: fert.unit.isEmpty ? null : fert.unit,
+                  items: units.map((u) => DropdownMenuItem(value: u, child: Text(u))).toList(),
+                  onChanged: (v) => setState(() {
+                    fert.unit = v ?? '';
+                    fert.isOtherUnit = v == 'Other (Manual)';
+                  }),
+                ),
+              ),
+            ],
+          ),
+          if (fert.isOtherUnit)
+            TextField(
+              decoration: const InputDecoration(hintText: 'Enter custom unit'),
+              onChanged: (v) => setState(() => fert.customUnit = v),
+            ),
+          const SizedBox(height: 8),
+          DropdownButtonFormField<String>(
+            decoration: const InputDecoration(labelText: 'Frequency'),
+            value: fert.frequency.isEmpty ? null : fert.frequency,
+            items: frequencies.map((f) => DropdownMenuItem(value: f, child: Text(f))).toList(),
+            onChanged: (v) => setState(() {
+              fert.frequency = v ?? '';
+              fert.isOtherFrequency = v == 'Other (Specify)';
+            }),
+          ),
+          if (fert.isOtherFrequency)
+            TextField(
+              decoration: const InputDecoration(hintText: 'Specify frequency'),
+              onChanged: (v) => setState(() => fert.customFrequency = v),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MiniInput extends StatelessWidget {
+  const _MiniInput({required this.label, required this.hint});
+  final String label;
+  final String hint;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      decoration: InputDecoration(labelText: label, hintText: hint),
+    );
+  }
+}
+
+class FertilizerEntry {
+  FertilizerEntry({required this.id});
+  final String id;
+  String fertilizer = '';
+  String customFertilizer = '';
+  String quantity = '';
+  String unit = '';
+  String customUnit = '';
+  String frequency = '';
+  String customFrequency = '';
+  bool isOther = false;
+  bool isOtherUnit = false;
+  bool isOtherFrequency = false;
+}
