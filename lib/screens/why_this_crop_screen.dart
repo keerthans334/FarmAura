@@ -8,25 +8,56 @@ import '../widgets/floating_ivr.dart';
 
 import 'package:farmaura/l10n/app_localizations.dart';
 class WhyThisCropScreen extends StatelessWidget {
-  const WhyThisCropScreen({super.key, required this.appState});
+  const WhyThisCropScreen({
+    super.key, 
+    required this.appState,
+    required this.cropData,
+    required this.contextData,
+  });
+
   final AppState appState;
+  final Map<String, dynamic> cropData;
+  final Map<String, dynamic> contextData;
 
   @override
   Widget build(BuildContext context) {
+    final cropName = cropData['crop']?.toString() ?? 'Unknown';
+    final suitability = ((cropData['suitability_score'] ?? 0.0) * 100).toStringAsFixed(0);
+    final agronomic = cropData['agronomic_params'] ?? {};
+    final ph = agronomic['ph']?.toStringAsFixed(1) ?? '?';
+    final n = agronomic['nitrogen_kg_ha']?.toStringAsFixed(0) ?? '?';
+    final p = agronomic['phosphorus_kg_ha']?.toStringAsFixed(0) ?? '?';
+    final k = agronomic['potassium_kg_ha']?.toStringAsFixed(0) ?? '?';
+    final temp = agronomic['temperature_c']?.toStringAsFixed(1) ?? '?';
+    final rain = agronomic['rainfall_mm']?.toStringAsFixed(0) ?? '?';
+    final profit = cropData['expected_profit_inr']?.toStringAsFixed(0) ?? '?';
+    final market = cropData['mandi_suggestion'] ?? 'Local Market';
+    final prevCrop = contextData['frequentCrop'] ?? 'Previous Crop';
+    final fertilizerNote = cropData['fertilizer_note'] ?? 'Follow standard fertilizer application.';
+
     return Scaffold(
       body: SafeArea(
         child: Stack(
           children: [
             Column(
               children: [
-                AppHeader(title: AppLocalizations.of(context)!.whyCropTitle('Cotton'), showBack: true, showProfile: false, appState: appState, onBack: () => Navigator.of(context).pop()),
+                AppHeader(
+                  title: AppLocalizations.of(context)!.whyCropTitle(cropName),
+                  showBack: true,
+                  showProfile: false,
+                  appState: appState,
+                  onBack: () => Navigator.of(context).pop(),
+                ),
                 Expanded(
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 100),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(AppLocalizations.of(context)!.whyCropSubtitle('cotton'), style: const TextStyle(color: AppColors.muted, fontSize: 14)),
+                        Text(
+                          AppLocalizations.of(context)!.whyCropSubtitle(cropName.toLowerCase()),
+                          style: const TextStyle(color: AppColors.muted, fontSize: 14),
+                        ),
                         const SizedBox(height: 20),
                         // Hero Card
                         Container(
@@ -43,7 +74,7 @@ class WhyThisCropScreen extends StatelessWidget {
                           ),
                           child: Column(
                             children: [
-                              const Text('95%', style: TextStyle(color: Colors.white, fontSize: 48, fontWeight: FontWeight.bold)),
+                              Text('$suitability%', style: const TextStyle(color: Colors.white, fontSize: 48, fontWeight: FontWeight.bold)),
                               Text(AppLocalizations.of(context)!.suitabilityScore, style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600)),
                               const SizedBox(height: 8),
                               Container(
@@ -69,25 +100,25 @@ class WhyThisCropScreen extends StatelessWidget {
                         const SizedBox(height: 16),
                         _FactorCard(
                           title: AppLocalizations.of(context)!.excellentSoilMatch,
-                          description: 'Your loamy soil with pH 6.5 is perfect for cotton cultivation. The NPK ratio matches cotton requirements.',
+                          description: 'Soil pH $ph is suitable. Nutrient requirements: N ($n kg/ha), P ($p kg/ha), K ($k kg/ha).',
                           icon: LucideIcons.sprout,
                           color: Colors.green,
                         ),
                         _FactorCard(
                           title: AppLocalizations.of(context)!.weatherSuitability,
-                          description: 'Current temperature (28-32°C) and upcoming rainfall pattern are ideal for cotton sowing season.',
+                          description: 'Optimal temperature ($temp°C) and rainfall ($rain mm) for this season.',
                           icon: Icons.wb_sunny_outlined,
                           color: Colors.orange,
                         ),
                         _FactorCard(
                           title: AppLocalizations.of(context)!.rotationBenefit,
-                          description: 'Cotton after wheat provides excellent crop rotation benefits, reducing pest pressure and improving soil health.',
+                          description: 'Good rotation option after $prevCrop to maintain soil health.',
                           icon: Icons.sync,
                           color: Colors.blue,
                         ),
                         _FactorCard(
                           title: AppLocalizations.of(context)!.marketAdvantage,
-                          description: 'Current cotton prices are ₹7,200/quintal with 12% upward trend. MSP support available at ₹6,620/quintal.',
+                          description: '$market. Expected profit: ₹$profit/ha.',
                           icon: Icons.attach_money,
                           color: Colors.amber,
                         ),
@@ -130,9 +161,9 @@ class WhyThisCropScreen extends StatelessWidget {
                                   children: [
                                     Text(AppLocalizations.of(context)!.proTip, style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700)),
                                     const SizedBox(height: 4),
-                                    const Text(
-                                      'Ensure proper spacing of 2-3 feet between plants and maintain adequate irrigation during flowering stage for maximum yield.',
-                                      style: TextStyle(color: AppColors.primaryDark, fontSize: 13, height: 1.4),
+                                    Text(
+                                      fertilizerNote,
+                                      style: const TextStyle(color: AppColors.primaryDark, fontSize: 13, height: 1.4),
                                     ),
                                   ],
                                 ),
