@@ -8,7 +8,6 @@ import '../widgets/app_footer.dart';
 import '../widgets/floating_ivr.dart';
 import 'recommendation_results_screen.dart';
 import '../utils/location_helper.dart';
-import '../services/crop_recommendation_service.dart';
 
 import 'package:farmaura/l10n/app_localizations.dart';
 
@@ -21,8 +20,6 @@ class CombinedInputScreen extends StatefulWidget {
 }
 
 class _CombinedInputScreenState extends State<CombinedInputScreen> {
-  final _cropService = CropRecommendationService();
-  
   String soilInputMode = 'auto';
   String landSize = '';
   String irrigation = '';
@@ -31,14 +28,6 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
   double ph = 7;
   String lastCrop = '';
   String frequentCrop = '';
-
-  final _nitrogenController = TextEditingController();
-  final _phosphorusController = TextEditingController();
-  final _potassiumController = TextEditingController();
-  final _moistureController = TextEditingController();
-
-  Map<String, dynamic> _modelParameters = {};
-  bool _isLoading = false;
 
   final landSizes = const ['< 1 Acre', '1-2 Acres', '2-5 Acres', '5-10 Acres', '> 10 Acres', 'Other (Manual)'];
   final irrigationTypes = const ['Rainfed', 'Canal', 'Borewell', 'Drip', 'Other (Manual)'];
@@ -60,15 +49,6 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
 
   List<FertilizerEntry> fertilizers = [FertilizerEntry(id: '1')];
 
-  @override
-  void dispose() {
-    _nitrogenController.dispose();
-    _phosphorusController.dispose();
-    _potassiumController.dispose();
-    _moistureController.dispose();
-    super.dispose();
-  }
-
   bool get isValid {
     final effectiveLandSize = landSize == 'Other (Manual)' ? customInputs['landSize']! : landSize;
     final effectiveIrrigation = irrigation == 'Other (Manual)' ? customInputs['irrigation']! : irrigation;
@@ -79,147 +59,11 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
 
     if (soilInputMode == 'manual') {
       final effectiveSoilType = soilType == 'Other (Manual)' ? customInputs['soilType']! : soilType;
-      // Texture is optional or can be defaulted
-      requiredFields.add(effectiveSoilType);
+      final effectiveTexture = texture == 'Other (Manual)' ? customInputs['texture']! : texture;
+      requiredFields.addAll([effectiveSoilType, effectiveTexture]);
     }
 
     return requiredFields.every((e) => e.isNotEmpty);
-  }
-
-  Future<void> _autoFillParameters() async {
-    // Validate required fields
-    if (widget.appState.location['state'] == 'Unknown' || widget.appState.location['state'] == null) {
-       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Location not found. Please enable location services.')),
-      );
-      return;
-    }
-    
-    if (frequentCrop.isEmpty || landSize.isEmpty || irrigation.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill Farm Details and Crop Rotation first to auto-detect soil parameters.')),
-      );
-      return;
-    }
-
-    setState(() => _isLoading = true);
-
-    try {
-      // Parse land size (simple logic for now)
-      double size = 1.0;
-      if (landSize == '< 1 Acre') size = 0.5;
-      else if (landSize == '1-2 Acres') size = 1.5;
-      else if (landSize == '2-5 Acres') size = 3.5;
-      else if (landSize == '5-10 Acres') size = 7.5;
-      else if (landSize == '> 10 Acres') size = 15.0;
-      else if (customInputs['landSize'] != null && customInputs['landSize']!.isNotEmpty) {
-         size = double.tryParse(customInputs['landSize']!) ?? 1.0;
-      }
-
-      final result = await _cropService.autoFillParameters(
-        state: widget.appState.location['state']!,
-        district: widget.appState.location['district'] ?? 'Unknown',
-        frequentCrop: frequentCrop == 'Other (Manual)' ? customInputs['previousCrop']! : frequentCrop,
-        landSize: size,
-        irrigationType: irrigation == 'Other (Manual)' ? customInputs['irrigation']! : irrigation,
-      );
-
-      if (result['status'] == 'success') {
-        final params = result['parameters'];
-        setState(() {
-          _modelParameters = params;
-          
-          // Update UI fields
-          _nitrogenController.text = (params['Nitrogen'] as num).toStringAsFixed(1);
-          _phosphorusController.text = (params['Phosphorus'] as num).toStringAsFixed(1);
-          _potassiumController.text = (params['Potassium'] as num).toStringAsFixed(1);
-          _moistureController.text = (params['SoilMoisture'] as num).toStringAsFixed(1);
-          ph = (params['pH'] as num).toDouble();
-          
-          // Map SoilTexture to soilType
-          String modelTexture = params['SoilTexture'].toString();
-          if (modelTexture.contains('Clay')) soilType = 'Clay';
-          else if (modelTexture.contains('Sand')) soilType = 'Sandy';
-          else if (modelTexture.contains('Loam')) soilType = 'Loamy';
-          else soilType = 'Other (Manual)';
-          
-          // Switch to manual mode to show the fields for editing
-          soilInputMode = 'manual'; 
-        });
-        
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Parameters auto-filled! You can now review them.')),
-        );
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
-    } finally {
-      setState(() => _isLoading = false);
-    }
-  }
-
-  Future<void> _getRecommendation() async {
-    setState(() => _isLoading = true);
-
-    try {
-      // Prepare parameters
-      // If manual mode, update _modelParameters with current UI values
-      if (soilInputMode == 'manual') {
-        _modelParameters['Nitrogen'] = double.tryParse(_nitrogenController.text) ?? 50.0;
-        _modelParameters['Phosphorus'] = double.tryParse(_phosphorusController.text) ?? 20.0;
-        _modelParameters['Potassium'] = double.tryParse(_potassiumController.text) ?? 20.0;
-        _modelParameters['SoilMoisture'] = double.tryParse(_moistureController.text) ?? 15.0;
-        _modelParameters['pH'] = ph;
-        _modelParameters['SoilTexture'] = soilType == 'Other (Manual)' ? (customInputs['soilType'] ?? 'Loam') : soilType;
-        // Ensure other 29 params exist (if auto-fill was skipped, we might need to fetch them or handle missing)
-        // For now, assuming auto-fill was called or we rely on backend defaults/handling
-      }
-
-      // Parse land size
-      double size = 1.0;
-      if (landSize == '< 1 Acre') size = 0.5;
-      else if (landSize == '1-2 Acres') size = 1.5;
-      else if (landSize == '2-5 Acres') size = 3.5;
-      else if (landSize == '5-10 Acres') size = 7.5;
-      else if (landSize == '> 10 Acres') size = 15.0;
-      else if (customInputs['landSize'] != null && customInputs['landSize']!.isNotEmpty) {
-         size = double.tryParse(customInputs['landSize']!) ?? 1.0;
-      }
-
-      final result = await _cropService.getRecommendation(
-        state: widget.appState.location['state']!,
-        district: widget.appState.location['district'] ?? 'Unknown',
-        frequentCrop: frequentCrop == 'Other (Manual)' ? customInputs['previousCrop']! : frequentCrop,
-        landSize: size,
-        irrigationType: irrigation == 'Other (Manual)' ? customInputs['irrigation']! : irrigation,
-        parameters: _modelParameters,
-      );
-
-      if (result['status'] == 'success') {
-        final recommendations = result['recommendations'] as List;
-        
-        if (mounted) {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => RecommendationResultsScreen(
-                appState: widget.appState,
-                recommendations: recommendations,
-                contextData: {
-                  'state': widget.appState.location['state']!,
-                  'district': widget.appState.location['district'] ?? 'Unknown',
-                  'frequentCrop': frequentCrop == 'Other (Manual)' ? customInputs['previousCrop']! : frequentCrop,
-                  'landSize': size,
-                },
-              ),
-            ),
-          );
-        }
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
-    } finally {
-      setState(() => _isLoading = false);
-    }
   }
 
   String _getLocalizedValue(BuildContext context, String value) {
@@ -344,52 +188,6 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
                         ),
                         const SizedBox(height: 12),
                         _sectionCard(
-                          title: AppLocalizations.of(context)!.sectionCropRotation,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              DropdownButtonFormField<String>(
-                                decoration: InputDecoration(labelText: AppLocalizations.of(context)!.lastCropGrown),
-                                initialValue: lastCrop.isEmpty ? null : lastCrop,
-                                items: crops.map((c) => DropdownMenuItem(value: c, child: Text(_getLocalizedValue(context, c)))).toList(),
-                                onChanged: (v) => setState(() => lastCrop = v ?? ''),
-                              ),
-                              if (lastCrop == 'Other (Manual)')
-                                TextField(
-                                  decoration: InputDecoration(hintText: AppLocalizations.of(context)!.enterLastCrop),
-                                  onChanged: (v) => setState(() => customInputs['lastCrop'] = v),
-                                ),
-                              const SizedBox(height: 12),
-                              DropdownButtonFormField<String>(
-                                decoration: InputDecoration(labelText: AppLocalizations.of(context)!.frequentCrop),
-                                initialValue: frequentCrop.isEmpty ? null : frequentCrop,
-                                items: crops.map((c) => DropdownMenuItem(value: c, child: Text(_getLocalizedValue(context, c)))).toList(),
-                                onChanged: (v) => setState(() => frequentCrop = v ?? ''),
-                              ),
-                              if (frequentCrop == 'Other (Manual)')
-                                TextField(
-                                  decoration: InputDecoration(hintText: AppLocalizations.of(context)!.enterFrequentCrop),
-                                  onChanged: (v) => setState(() => customInputs['previousCrop'] = v),
-                                ),
-                              const SizedBox(height: 12),
-                              ...fertilizers.map((f) => _fertilizerCard(f)).toList(),
-                              const SizedBox(height: 12),
-                              ElevatedButton.icon(
-                                onPressed: () => setState(() => fertilizers.add(FertilizerEntry(id: (fertilizers.length + 1).toString()))),
-                                icon: const Icon(LucideIcons.plus),
-                                label: Text(AppLocalizations.of(context)!.addFertilizer),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.primary,
-                                  foregroundColor: Colors.white,
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                                  padding: const EdgeInsets.symmetric(vertical: 14),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        _sectionCard(
                           title: AppLocalizations.of(context)!.sectionSoilInfo,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -420,21 +218,13 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
                                 Container(
                                   padding: const EdgeInsets.all(12),
                                   decoration: BoxDecoration(color: Colors.blue.shade50, borderRadius: BorderRadius.circular(16), border: Border.all(color: Colors.blue.shade200)),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text('Location: ${widget.appState.location['district']}, ${widget.appState.location['state']}',
-                                          style: const TextStyle(color: AppColors.primaryDark)),
-                                      const SizedBox(height: 8),
-                                      const Text('Click "Auto-detect" above to fetch soil parameters based on your location and crop history.',
-                                          style: TextStyle(color: AppColors.muted, fontSize: 12)),
-                                    ],
-                                  ),
+                                  child: Text('Location: ${widget.appState.location['district']}, ${widget.appState.location['state']}',
+                                      style: const TextStyle(color: AppColors.primaryDark)),
                                 ),
                               if (soilInputMode == 'manual') ...[
                                 DropdownButtonFormField<String>(
                                   decoration: InputDecoration(labelText: AppLocalizations.of(context)!.soilType),
-                                  value: soilType.isEmpty ? null : soilType,
+                                  initialValue: soilType.isEmpty ? null : soilType,
                                   items: soilTypes.map((t) => DropdownMenuItem(value: t, child: Text(_getLocalizedValue(context, t)))).toList(),
                                   onChanged: (v) => setState(() => soilType = v ?? ''),
                                 ),
@@ -487,16 +277,16 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
                                 ),
                                 const SizedBox(height: 12),
                                 Row(
-                                  children: [
-                                    Expanded(child: _MiniInput(label: 'Nitrogen (N)', hint: '0-100', controller: _nitrogenController)),
-                                    const SizedBox(width: 8),
-                                    Expanded(child: _MiniInput(label: 'Phosphorus (P)', hint: '0-100', controller: _phosphorusController)),
-                                    const SizedBox(width: 8),
-                                    Expanded(child: _MiniInput(label: 'Potassium (K)', hint: '0-100', controller: _potassiumController)),
+                                  children: const [
+                                    Expanded(child: _MiniInput(label: 'Nitrogen (N)', hint: '0-100')),
+                                    SizedBox(width: 8),
+                                    Expanded(child: _MiniInput(label: 'Phosphorus (P)', hint: '0-100')),
+                                    SizedBox(width: 8),
+                                    Expanded(child: _MiniInput(label: 'Potassium (K)', hint: '0-100')),
                                   ],
                                 ),
                                 const SizedBox(height: 12),
-                                _MiniInput(label: AppLocalizations.of(context)!.soilMoisture, hint: AppLocalizations.of(context)!.enterMoisture, controller: _moistureController),
+                                _MiniInput(label: AppLocalizations.of(context)!.soilMoisture, hint: AppLocalizations.of(context)!.enterMoisture),
                               ],
                               if (soilInputMode == 'shc')
                                 Container(
@@ -537,13 +327,63 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
                             ],
                           ),
                         ),
+                        const SizedBox(height: 12),
+                        _sectionCard(
+                          title: AppLocalizations.of(context)!.sectionCropRotation,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              DropdownButtonFormField<String>(
+                                decoration: InputDecoration(labelText: AppLocalizations.of(context)!.lastCropGrown),
+                                initialValue: lastCrop.isEmpty ? null : lastCrop,
+                                items: crops.map((c) => DropdownMenuItem(value: c, child: Text(_getLocalizedValue(context, c)))).toList(),
+                                onChanged: (v) => setState(() => lastCrop = v ?? ''),
+                              ),
+                              if (lastCrop == 'Other (Manual)')
+                                TextField(
+                                  decoration: InputDecoration(hintText: AppLocalizations.of(context)!.enterLastCrop),
+                                  onChanged: (v) => setState(() => customInputs['lastCrop'] = v),
+                                ),
+                              const SizedBox(height: 12),
+                              DropdownButtonFormField<String>(
+                                decoration: InputDecoration(labelText: AppLocalizations.of(context)!.frequentCrop),
+                                initialValue: frequentCrop.isEmpty ? null : frequentCrop,
+                                items: crops.map((c) => DropdownMenuItem(value: c, child: Text(_getLocalizedValue(context, c)))).toList(),
+                                onChanged: (v) => setState(() => frequentCrop = v ?? ''),
+                              ),
+                              if (frequentCrop == 'Other (Manual)')
+                                TextField(
+                                  decoration: InputDecoration(hintText: AppLocalizations.of(context)!.enterFrequentCrop),
+                                  onChanged: (v) => setState(() => customInputs['previousCrop'] = v),
+                                ),
+                              const SizedBox(height: 12),
+                              ...fertilizers.map((f) => _fertilizerCard(f)).toList(),
+                              const SizedBox(height: 12),
+                              ElevatedButton.icon(
+                                onPressed: () => setState(() => fertilizers.add(FertilizerEntry(id: (fertilizers.length + 1).toString()))),
+                                icon: const Icon(LucideIcons.plus),
+                                label: Text(AppLocalizations.of(context)!.addFertilizer),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.primary,
+                                  foregroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                  padding: const EdgeInsets.symmetric(vertical: 14),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                         const SizedBox(height: 16),
                         SizedBox(
                           height: 56,
                           width: double.infinity,
                           child: ElevatedButton(
-                            onPressed: isValid && !_isLoading
-                                ? _getRecommendation
+                            onPressed: isValid
+                                ? () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (_) => RecommendationResultsScreen(appState: widget.appState)),
+                                    );
+                                  }
                                 : null,
                             style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(vertical: 16),
@@ -552,9 +392,7 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
                               foregroundColor: Colors.white,
                               disabledBackgroundColor: Colors.grey.shade300,
                             ),
-                            child: _isLoading 
-                                ? const SizedBox(height: 24, width: 24, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                                : Text(AppLocalizations.of(context)!.getRecommendation),
+                            child: Text(AppLocalizations.of(context)!.getRecommendation),
                           ),
                         ),
                         if (!isValid)
@@ -569,11 +407,6 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
               ],
             ),
             const FloatingIVR(),
-            if (_isLoading)
-              Container(
-                color: Colors.black.withOpacity(0.3),
-                child: const Center(child: CircularProgressIndicator()),
-              ),
           ],
         ),
       ),
@@ -585,11 +418,22 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
     return Expanded(
       child: GestureDetector(
         onTap: () async {
+          setState(() => soilInputMode = mode);
           if (mode == 'auto') {
-             // Trigger auto-fill
-             await _autoFillParameters();
-          } else {
-             setState(() => soilInputMode = mode);
+            try {
+              await widget.appState.updateLocationFromService();
+              if (mounted) setState(() {}); // Refresh to show new location
+            } catch (e) {
+              if (mounted) {
+                if (e.toString().contains('Location services are disabled')) {
+                  LocationHelper.showLocationServiceDialog(context, () {
+                    // Retry logic
+                  });
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+                }
+              }
+            }
           }
         },
         child: AnimatedContainer(
@@ -727,17 +571,14 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
 }
 
 class _MiniInput extends StatelessWidget {
-  const _MiniInput({required this.label, required this.hint, this.controller});
+  const _MiniInput({required this.label, required this.hint});
   final String label;
   final String hint;
-  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-      controller: controller,
       decoration: InputDecoration(labelText: label, hintText: hint),
-      keyboardType: TextInputType.number,
     );
   }
 }

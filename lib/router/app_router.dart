@@ -88,10 +88,7 @@ GoRouter createRouter(AppState appState) {
       ),
       GoRoute(
         path: '/crop-results',
-        builder: (context, state) {
-          final recommendations = state.extra as List<dynamic>? ?? [];
-          return RecommendationResultsScreen(appState: appState, recommendations: recommendations);
-        },
+        builder: (context, state) => RecommendationResultsScreen(appState: appState),
       ),
       GoRoute(
         path: '/crop-details',
@@ -99,14 +96,7 @@ GoRouter createRouter(AppState appState) {
       ),
       GoRoute(
         path: '/why-crop',
-        builder: (context, state) {
-          final extra = state.extra as Map<String, dynamic>? ?? {};
-          return WhyThisCropScreen(
-            appState: appState,
-            cropData: extra['cropData'] ?? {},
-            contextData: extra['contextData'] ?? {},
-          );
-        },
+        builder: (context, state) => WhyThisCropScreen(appState: appState),
       ),
       GoRoute(
         path: '/market',

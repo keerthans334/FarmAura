@@ -6,88 +6,69 @@ import '../widgets/app_header.dart';
 import '../widgets/app_footer.dart';
 import '../widgets/floating_ivr.dart';
 import 'why_this_crop_screen.dart';
-import '../services/crop_recommendation_service.dart';
 
 import 'package:farmaura/l10n/app_localizations.dart';
-
-class RecommendationResultsScreen extends StatefulWidget {
-  const RecommendationResultsScreen({
-    super.key,
-    required this.appState,
-    required this.recommendations,
-    this.contextData = const {},
-  });
-
+class RecommendationResultsScreen extends StatelessWidget {
+  const RecommendationResultsScreen({super.key, required this.appState});
   final AppState appState;
-  final List<dynamic> recommendations;
-  final Map<String, dynamic> contextData;
-
-  @override
-  State<RecommendationResultsScreen> createState() => _RecommendationResultsScreenState();
-}
-
-class _RecommendationResultsScreenState extends State<RecommendationResultsScreen> {
-  final Map<String, Future<String>> _explanationFutures = {};
-
-  @override
-  void initState() {
-    super.initState();
-    _preloadExplanations();
-  }
-
-  void _preloadExplanations() {
-    for (var rec in widget.recommendations) {
-      final cropName = rec['crop'];
-      _explanationFutures[cropName] = CropRecommendationService().getExplanation(
-        cropName: cropName,
-        state: widget.contextData['state'] ?? '',
-        district: widget.contextData['district'] ?? '',
-        frequentCrop: widget.contextData['frequentCrop'] ?? '',
-        landSize: (widget.contextData['landSize'] ?? 1.0).toDouble(),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
+    final recs = [
+      _Rec(
+        AppLocalizations.of(context)!.cotton,
+        AppLocalizations.of(context)!.excellentSoilMatch,
+        '95%',
+        '₹85,000',
+        '18-20 quintals/acre',
+        'assets/icons/cotton.png', // Placeholder path
+        LucideIcons.sprout,
+        true,
+        Colors.green,
+        1,
+      ),
+      _Rec(
+        AppLocalizations.of(context)!.soybean,
+        AppLocalizations.of(context)!.rotationBenefit,
+        '88%',
+        '₹65,000',
+        '12-15 quintals/acre',
+        'assets/icons/soybean.png', // Placeholder path
+        LucideIcons.bean,
+        true,
+        Colors.orange,
+        2,
+      ),
+      _Rec(
+        AppLocalizations.of(context)!.maize,
+        AppLocalizations.of(context)!.weatherSuitability,
+        '82%',
+        '₹55,000',
+        '25-30 quintals/acre',
+        'assets/icons/corn.png', // Placeholder path
+        LucideIcons.wheat,
+        true,
+        Colors.brown,
+        3,
+      ),
+    ];
+
     return Scaffold(
       body: SafeArea(
         child: Stack(
           children: [
             Column(
               children: [
-                AppHeader(
-                  title: AppLocalizations.of(context)!.recommendedCrops,
-                  showBack: true,
-                  showProfile: false,
-                  appState: widget.appState,
-                  onBack: () => Navigator.of(context).pop(),
-                ),
+                AppHeader(title: AppLocalizations.of(context)!.recommendedCrops, showBack: true, showProfile: false, appState: appState, onBack: () => Navigator.of(context).pop()),
                 Expanded(
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 100),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          AppLocalizations.of(context)!.basedOnFarmConditions,
-                          style: const TextStyle(color: AppColors.muted, fontSize: 14),
-                        ),
+                        Text(AppLocalizations.of(context)!.basedOnFarmConditions, style: const TextStyle(color: AppColors.muted, fontSize: 14)),
                         const SizedBox(height: 16),
-                        if (widget.recommendations.isEmpty)
-                          const Center(child: Text('No recommendations found.'))
-                        else
-                          ...widget.recommendations.asMap().entries.map((entry) {
-                            final index = entry.key;
-                            final rec = entry.value;
-                            return _RecommendationCard(
-                              rec: rec,
-                              rank: index + 1,
-                              appState: widget.appState,
-                              explanationFuture: _explanationFutures[rec['crop']]!,
-                              contextData: widget.contextData,
-                            );
-                          }),
+                        ...recs.map((r) => _RecommendationCard(rec: r, appState: appState)),
                         const SizedBox(height: 20),
                         SizedBox(
                           width: double.infinity,
@@ -98,14 +79,7 @@ class _RecommendationResultsScreenState extends State<RecommendationResultsScree
                               side: const BorderSide(color: AppColors.primary),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                             ),
-                            child: Text(
-                              AppLocalizations.of(context)!.tryDifferentInputs,
-                              style: const TextStyle(
-                                color: AppColors.primary,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
+                            child: Text(AppLocalizations.of(context)!.tryDifferentInputs, style: const TextStyle(color: AppColors.primary, fontSize: 16, fontWeight: FontWeight.w600)),
                           ),
                         ),
                       ],
@@ -123,93 +97,64 @@ class _RecommendationResultsScreenState extends State<RecommendationResultsScree
   }
 }
 
-class _RecommendationCard extends StatelessWidget {
-  const _RecommendationCard({
-    required this.rec,
-    required this.rank,
-    required this.appState,
-    required this.explanationFuture,
-    required this.contextData,
-  });
-
-  final Map<String, dynamic> rec;
+class _Rec {
+  _Rec(this.title, this.subtitle, this.score, this.profit, this.yield, this.path, this.icon, this.isPositive, this.color, this.rank);
+  final String title;
+  final String subtitle;
+  final String score;
+  final String profit;
+  final String yield;
+  final String path;
+  final IconData icon;
+  final bool isPositive;
+  final Color color;
   final int rank;
+}
+
+class _RecommendationCard extends StatelessWidget {
+  const _RecommendationCard({required this.rec, required this.appState});
+  final _Rec rec;
   final AppState appState;
-  final Future<String> explanationFuture;
-  final Map<String, dynamic> contextData;
 
   @override
   Widget build(BuildContext context) {
-    final cropName = rec['crop'] ?? 'Unknown Crop';
-    final suitability = (rec['suitability_score'] * 100).toStringAsFixed(0);
-    final profit = '₹${rec['expected_profit_inr']?.toStringAsFixed(0) ?? '0'}';
-    final yieldVal = '${rec['expected_yield_q_per_ha']?.toStringAsFixed(1) ?? '0'} q/ha';
-    
-    // Determine color based on rank
-    Color color;
-    if (rank == 1) color = const Color(0xFF2E7D32); // Dark Green
-    else if (rank == 2) color = const Color(0xFFE65100); // Orange
-    else color = const Color(0xFF1565C0); // Blue
-
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 12, offset: const Offset(0, 4))],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
+              // Placeholder for Crop Icon/Image
               Container(
-                padding: const EdgeInsets.all(10),
+                width: 48,
+                height: 48,
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: rec.color.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(LucideIcons.sprout, color: color, size: 24),
+                child: Icon(rec.icon, color: rec.color, size: 28),
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      cropName.toUpperCase(),
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.primaryDark,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      '$rank Match',
-                      style: const TextStyle(color: AppColors.muted, fontSize: 12),
-                    ),
+                    Text(rec.title, style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700, fontSize: 18)),
+                    Text(rec.subtitle, style: const TextStyle(color: AppColors.muted, fontSize: 12)),
                   ],
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                decoration: BoxDecoration(
-                  color: color,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  '#$rank',
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(color: rec.color, borderRadius: BorderRadius.circular(12)),
+                child: Text('#${rec.rank}', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
               ),
             ],
           ),
@@ -217,39 +162,26 @@ class _RecommendationCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(AppLocalizations.of(context)!.suitabilityScore, style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w600)),
-              Text('$suitability%', style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700)),
+              Text(AppLocalizations.of(context)!.suitabilityScore, style: const TextStyle(color: AppColors.primaryDark, fontSize: 13)),
+              Text(rec.score, style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.bold)),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
           ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
-              value: (rec['suitability_score'] ?? 0.0).toDouble(),
+              value: double.parse(rec.score.replaceAll('%', '')) / 100,
               backgroundColor: Colors.grey.shade200,
-              color: color,
+              color: rec.color,
               minHeight: 8,
             ),
           ),
           const SizedBox(height: 16),
           Row(
             children: [
-              Expanded(
-                child: _StatBox(
-                  label: AppLocalizations.of(context)!.expectedProfit,
-                  value: profit,
-                  subLabel: 'per hectare',
-                  icon: Icons.attach_money,
-                ),
-              ),
+              Expanded(child: _StatBox(label: AppLocalizations.of(context)!.expectedProfit, value: rec.profit, subLabel: AppLocalizations.of(context)!.perAcre, icon: Icons.attach_money)),
               const SizedBox(width: 12),
-              Expanded(
-                child: _StatBox(
-                  label: AppLocalizations.of(context)!.yieldEstimate,
-                  value: yieldVal,
-                  icon: Icons.trending_up,
-                ),
-              ),
+              Expanded(child: _StatBox(label: AppLocalizations.of(context)!.yieldEstimate, value: rec.yield, icon: Icons.trending_up)),
             ],
           ),
           const SizedBox(height: 16),
@@ -260,13 +192,7 @@ class _RecommendationCard extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => WhyThisCropScreen(
-                          appState: appState,
-                          cropData: rec,
-                          contextData: contextData,
-                        ),
-                      ),
+                      MaterialPageRoute(builder: (context) => WhyThisCropScreen(appState: appState)),
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -275,61 +201,25 @@ class _RecommendationCard extends StatelessWidget {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     elevation: 0,
                   ),
-                  child: Text(
-                    AppLocalizations.of(context)!.whyThisCrop,
-                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-                  ),
+                  child: Text(AppLocalizations.of(context)!.whyThisCrop, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: OutlinedButton(
                   onPressed: () {
-                     showDialog(
-                       context: context,
-                       builder: (ctx) => AlertDialog(
-                         title: Text(rec['crop']),
-                         content: FutureBuilder<String>(
-                           future: explanationFuture,
-                           builder: (context, snapshot) {
-                             if (snapshot.connectionState == ConnectionState.waiting) {
-                               return const SizedBox(
-                                 height: 150,
-                                 child: Center(
-                                   child: Column(
-                                     mainAxisAlignment: MainAxisAlignment.center,
-                                     children: [
-                                       CircularProgressIndicator(),
-                                       SizedBox(height: 16),
-                                       Text("Generating AI explanation...", style: TextStyle(color: AppColors.muted)),
-                                     ],
-                                   ),
-                                 ),
-                               );
-                             }
-                             if (snapshot.hasError) {
-                               return Text('Error: ${snapshot.error}');
-                             }
-                             return SingleChildScrollView(
-                               child: Text(snapshot.data ?? 'No explanation available.'),
-                             );
-                           },
-                         ),
-                         actions: [
-                           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Close'))
-                         ],
-                       )
-                     );
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => WhyThisCropScreen(appState: appState),
+                      ),
+                    );
                   },
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     side: const BorderSide(color: AppColors.primary),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
-                  child: Text(
-                    AppLocalizations.of(context)!.viewDetails,
-                    style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w600),
-                  ),
+                  child: Text(AppLocalizations.of(context)!.viewDetails, style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w600)),
                 ),
               ),
             ],
