@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/location_service.dart';
 import 'package:geolocator/geolocator.dart';
+import 'weather.dart';
 
 class AppState extends ChangeNotifier {
   String userLanguage = 'English';
@@ -49,6 +50,34 @@ class AppState extends ChangeNotifier {
   };
 
   List<String> capturedImages = [];
+
+  Weather? weather;
+  bool isIVROpen = false;
+  bool isIVRTextMode = false;
+
+  void openIVR({bool textMode = false}) {
+    isIVROpen = true;
+    isIVRTextMode = textMode;
+    notifyListeners();
+  }
+
+  void closeIVR() {
+    isIVROpen = false;
+    notifyListeners();
+  }
+
+  String? currentContextText;
+  void updateContextText(String? text) {
+    currentContextText = text;
+    // We don't necessarily need to notify listeners if FloatingIVR reads it on demand, 
+    // but if we want it reactive, we should.
+    notifyListeners(); 
+  }
+
+  void updateWeather(Weather w) {
+    weather = w;
+    notifyListeners();
+  }
 
   void setLanguage(String language) {
     userLanguage = language;

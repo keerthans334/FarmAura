@@ -123,4 +123,26 @@ class CropRecommendationService {
       return false;
     }
   }
+  Future<Map<String, dynamic>?> getLatestRecommendation(String phoneNumber) async {
+    final url = Uri.parse('$baseUrl/recommendations/$phoneNumber');
+    try {
+      final response = await http.get(url).timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final List<dynamic> history = data['history'] ?? [];
+        if (history.isNotEmpty) {
+          // Assuming history is sorted descending by date, or we take the first one
+          // The backend db_service.get_recommendations usually returns list.
+          // We'll assume the first one is the latest or check timestamps if available.
+          // For now, returning the first item.
+          return history.first as Map<String, dynamic>;
+        }
+      }
+      return null;
+    } catch (e) {
+      print('Error fetching latest recommendation: $e');
+      return null;
+    }
+  }
 }

@@ -146,7 +146,6 @@ class PestResultScreen extends StatelessWidget {
               ],
             ),
 
-            const FloatingIVR(),
           ],
         ),
       ),

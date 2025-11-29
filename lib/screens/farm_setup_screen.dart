@@ -467,7 +467,6 @@ class _FarmSetupScreenState extends State<FarmSetupScreen> {
                 ],
               ),
             ),
-            const FloatingIVR(),
           ],
         ),
       ),

@@ -7,6 +7,7 @@ import '../screens/otp_verification_screen.dart';
 import '../screens/profile_setup_screen.dart';
 import '../screens/farm_setup_screen.dart';
 import '../screens/dashboard_screen.dart';
+import '../widgets/floating_ivr.dart';
 import '../screens/soil_details_screen.dart';
 import '../screens/weather_details_screen.dart';
 import '../screens/crop_recommendation_start_screen.dart';
@@ -33,11 +34,22 @@ import '../screens/privacy_policy_screen.dart';
 import '../screens/about_us_screen.dart';
 import '../screens/help_support_screen.dart';
 import '../screens/farm_details_screen.dart';
+import '../screens/search_screen.dart';
 
 GoRouter createRouter(AppState appState) {
   return GoRouter(
     initialLocation: '/',
     routes: [
+      ShellRoute(
+        builder: (context, state, child) {
+          return Stack(
+            children: [
+              child,
+              FloatingIVR(currentRoute: state.fullPath),
+            ],
+          );
+        },
+        routes: [
       GoRoute(
         path: '/',
         builder: (context, state) => WelcomeScreen(appState: appState),
@@ -187,6 +199,15 @@ GoRouter createRouter(AppState appState) {
       GoRoute(
         path: '/help-support',
         builder: (context, state) => HelpSupportScreen(appState: appState),
+      ),
+      GoRoute(
+        path: '/search',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return SearchScreen(initialQuery: extra?['query']);
+        },
+      ),
+        ],
       ),
     ],
     errorBuilder: (context, state) => WelcomeScreen(appState: appState),

@@ -69,6 +69,19 @@ class Weather {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'currentTempC': currentTempC,
+      'feelsLikeC': feelsLikeC,
+      'condition': condition,
+      'humidity': humidity,
+      'windKph': windKph,
+      'visibilityKm': visibilityKm,
+      'pressureMb': pressureMb,
+      'dailyForecast': dailyForecast.map((d) => d.toJson()).toList(),
+    };
+  }
+
   static String getIconNameForCondition(String condition) {
     final c = condition.toLowerCase();
     if (c.contains('thunder')) return 'storm';
@@ -112,5 +125,15 @@ class DailyForecast {
       condition: cond,
       iconName: Weather.getIconNameForCondition(cond),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'date': date.toIso8601String(),
+      'maxTempC': maxTempC,
+      'minTempC': minTempC,
+      'rainChance': rainChance,
+      'condition': condition,
+    };
   }
 }

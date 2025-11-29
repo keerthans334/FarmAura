@@ -581,7 +581,6 @@ class _CombinedInputScreenState extends State<CombinedInputScreen> {
                 ),
               ],
             ),
-            const FloatingIVR(),
             if (_isLoading)
               Container(
                 color: Colors.black.withOpacity(0.3),

@@ -19,7 +19,7 @@ class _SectionHeader extends StatelessWidget {
 }
 
 class _DetailCard extends StatelessWidget {
-  const _DetailCard({required this.title, required this.content});
+  const _DetailCard({required this.title, required this.content, this.isPositive = true});
   final String title;
   final String content;
   final bool isPositive;
@@ -46,7 +46,7 @@ class _DetailCard extends StatelessWidget {
 }
 
 class _ProfitRow extends StatelessWidget {
-  const _ProfitRow({required this.label, required this.value});
+  const _ProfitRow({required this.label, required this.value, this.isBold = false, this.isGreen = false});
   final String label;
   final String value;
   final bool isBold;

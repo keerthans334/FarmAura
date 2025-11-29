@@ -920,6 +920,72 @@ def get_recommendation_history(phone_number):
     except Exception as e:
         logger.error(f"Error fetching history: {str(e)}")
         return jsonify({'status': 'error', 'message': str(e)}), 500
+@app.route('/api/voice-query', methods=['POST'])
+def process_voice_query():
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'status': 'error', 'message': 'No data provided'}), 400
+            
+        query = data.get('query')
+        context = data.get('context', {})
+        language = data.get('language', 'en')
+        
+        if not query:
+            return jsonify({'status': 'error', 'message': 'Missing query'}), 400
+
+        logger.info(f"Processing voice query: '{query}' in language: {language}")
+        
+        # Construct prompt for Gemini
+        # Construct prompt for Gemini
+        screen_context = context.get('screen', 'home')
+        farmer_profile = context.get('profile', {})
+        location = context.get('location', {})
+        weather = context.get('weather', {})
+        latest_reco = context.get('latest_crop_reco', {})
+        memory = context.get('memory', [])
+        
+        system_instruction = f"""You are a friendly agricultural assistant for an Indian farmer.
+Current Language: {language} (Reply in this language or English if requested).
+Farmer Name: {farmer_profile.get('name', 'Farmer')}
+Location: {location.get('district', 'Unknown')}, {location.get('state', 'India')}
+Current Screen: {screen_context}
+Weather: {json.dumps(weather)}
+Latest Crop Recommendation: {json.dumps(latest_reco)}
+
+Task: Answer the farmer's question simply and clearly.
+- Keep it short (2-3 sentences max) for voice output.
+- Use simple words.
+- Use the provided context (Weather, Crop Reco) to give personalized advice.
+- Maintain conversation continuity based on previous messages.
+"""
+
+        # Format memory for prompt (last 5 turns)
+        memory_str = ""
+        if memory:
+            memory_str = "Previous Conversation:\n" + "\n".join([f"User: {m.get('user_query')}\nAssistant: {m.get('assistant_response')}" for m in memory[-5:]])
+
+        user_prompt = f"{memory_str}\n\nFarmer asks: {query}\n\nAdditional Context Data: {json.dumps(context.get('data', {}))}"
+        
+        full_prompt = f"{system_instruction}\n\n{user_prompt}"
+        
+        try:
+            response = gemini_model.generate_content(full_prompt)
+            answer = response.text.strip()
+        except Exception as e:
+            logger.error(f"Gemini generation failed: {e}")
+            answer = "I am sorry, I could not process your request at the moment. Please try again."
+
+        return jsonify({
+            'status': 'success',
+            'response': answer,
+            'language': language
+        }), 200
+
+    except Exception as e:
+        logger.error(f"Error processing voice query: {str(e)}")
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
 @app.errorhandler(404)
 def not_found(e):
     return jsonify({

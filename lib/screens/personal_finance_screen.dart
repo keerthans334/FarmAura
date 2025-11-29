@@ -189,7 +189,6 @@ class _PersonalFinanceScreenState extends State<PersonalFinanceScreen> {
                   ],
                 ),
               ),
-              const FloatingIVR(),
             ],
           ),
         ),

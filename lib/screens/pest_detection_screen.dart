@@ -110,7 +110,6 @@ class _PestDetectionScreenState extends State<PestDetectionScreen> {
                 ),
               ],
             ),
-            const FloatingIVR(),
           ],
         ),
       ),

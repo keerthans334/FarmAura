@@ -7,7 +7,10 @@ import 'models/app_state.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:farmaura/l10n/app_localizations.dart';
 
-void main() {
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+void main() async {
+  await dotenv.load(fileName: ".env");
   runApp(
     ChangeNotifierProvider(
       create: (_) => AppState(),

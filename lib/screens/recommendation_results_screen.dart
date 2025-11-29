@@ -33,6 +33,18 @@ class _RecommendationResultsScreenState extends State<RecommendationResultsScree
   void initState() {
     super.initState();
     _preloadExplanations();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+       final text = widget.recommendations.isNotEmpty
+           ? widget.recommendations.take(3).map((r) => "For ${r['crop']}: ${r['fertilizer_note']}").join("\n\n")
+           : null;
+       widget.appState.updateContextText(text);
+    });
+  }
+
+  @override
+  void dispose() {
+    widget.appState.updateContextText(null);
+    super.dispose();
   }
 
   void _preloadExplanations() {
@@ -115,11 +127,6 @@ class _RecommendationResultsScreenState extends State<RecommendationResultsScree
               ],
             ),
             const Positioned(bottom: 0, left: 0, right: 0, child: AppFooter()),
-            FloatingIVR(
-              contextText: widget.recommendations.isNotEmpty
-                  ? widget.recommendations.take(3).map((r) => "For ${r['crop']}: ${r['fertilizer_note']}").join("\n\n")
-                  : null,
-            ),
           ],
         ),
       ),

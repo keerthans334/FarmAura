@@ -164,7 +164,6 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                 ],
               ),
             ),
-            const FloatingIVR(),
           ],
         ),
       ),

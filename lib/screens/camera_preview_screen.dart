@@ -59,7 +59,6 @@ class CameraPreviewScreen extends StatelessWidget {
               ],
             ),
             const Positioned(bottom: 0, left: 0, right: 0, child: AppFooter()),
-            const FloatingIVR(),
           ],
         ),
       ),

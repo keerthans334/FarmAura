@@ -113,7 +113,6 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                 ],
               ),
             ),
-            const FloatingIVR(),
           ],
         ),
       ),

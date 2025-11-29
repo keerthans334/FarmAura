@@ -13,6 +13,8 @@ import '../utils/location_helper.dart';
 import 'personal_finance_screen.dart';
 import '../models/weather.dart';
 import '../services/weather_api_service.dart';
+import '../services/weather_api_service.dart';
+import '../services/voice_assistant_service.dart';
 import 'package:farmaura/l10n/app_localizations.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -28,7 +30,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   bool showLocation = false;
   
   // Weather state
-  Weather? _weather;
+  // Weather? _weather; // Moved to AppState
   bool _loadingWeather = true;
   String? _weatherError;
 
@@ -103,8 +105,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
       final weather = await service.getWeatherByCoordinates(lat, lon);
       if (mounted) {
+        widget.appState.updateWeather(weather);
         setState(() {
-          _weather = weather;
           _loadingWeather = false;
           _weatherError = null;
         });
@@ -118,6 +120,38 @@ class _DashboardScreenState extends State<DashboardScreen> {
       }
     }
   }
+
+  Future<void> _startVoiceSearch() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 16),
+            const Icon(LucideIcons.mic, size: 48, color: AppColors.primary),
+            const SizedBox(height: 16),
+            Text('Listening...'),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () async {
+                Navigator.pop(ctx);
+                final text = await VoiceAssistantService().stopListeningAndTranscribe('en'); 
+                if (text != null && text.isNotEmpty && mounted) {
+                   context.push('/search', extra: {'query': text});
+                }
+              },
+              child: const Text('Stop'),
+            ),
+          ],
+        ),
+      ),
+    );
+    await VoiceAssistantService().startListening();
+  }
+
+
 
   String get greeting {
     final hour = DateTime.now().hour;
@@ -216,14 +250,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                           child: Row(
                             children: [
-                              Container(
-                                width: 46,
-                                height: 46,
-                                decoration: const BoxDecoration(
-                                  gradient: LinearGradient(colors: [AppColors.primary, AppColors.primaryDark]),
-                                  shape: BoxShape.circle,
+                                GestureDetector(
+                                  onTap: _startVoiceSearch,
+                                child: Container(
+                                  width: 46,
+                                  height: 46,
+                                  decoration: const BoxDecoration(
+                                    gradient: LinearGradient(colors: [AppColors.primary, AppColors.primaryDark]),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(LucideIcons.mic, color: Colors.white, size: 20),
                                 ),
-                                child: const Icon(LucideIcons.mic, color: Colors.white, size: 20),
                               ),
                               const SizedBox(width: 12),
                               Expanded(
@@ -233,7 +270,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     hintText: AppLocalizations.of(context)!.searchHint,
                                     border: InputBorder.none,
                                   ),
-                                  onTap: () => context.go('/ai-chat'),
+                                  onTap: () => context.push('/search'),
                                 ),
                               ),
                             ],
@@ -245,12 +282,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           children: [
                             _topCard(
                               context, 
-                              title: _loadingWeather ? '...' : (_weatherError != null ? AppLocalizations.of(context)!.unavailable : '${_weather?.currentTempC ?? "--"}°C'), 
+                              title: _loadingWeather ? '...' : (_weatherError != null ? AppLocalizations.of(context)!.unavailable : '${widget.appState.weather?.currentTempC ?? "--"}°C'), 
                               subtitle: _loadingWeather 
                                   ? AppLocalizations.of(context)!.loading 
                                   : (_weatherError != null 
                                       ? (_weatherError!.length > 20 ? '${_weatherError!.substring(0, 17)}...' : _weatherError!) 
-                                      : (_weather?.condition ?? 'Unknown')), 
+                                      : (widget.appState.weather?.condition ?? 'Unknown')), 
                               icon: LucideIcons.sun, 
                               colors: [const Color(0xFFFFC107), const Color(0xFFFF9800)], 
                               onTap: () {
@@ -346,7 +383,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ],
             ),
             const Positioned(bottom: 0, left: 0, right: 0, child: AppFooter()),
-            const FloatingIVR(),
+            // FloatingIVR moved to ShellRoute
             if (showLocation)
               Center(
                 child: LocationMapPopup(
