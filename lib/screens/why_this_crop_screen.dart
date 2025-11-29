@@ -5,8 +5,9 @@ import '../theme/app_theme.dart';
 import '../widgets/app_header.dart';
 import '../widgets/app_footer.dart';
 import '../widgets/floating_ivr.dart';
-
 import 'package:farmaura/l10n/app_localizations.dart';
+import '../services/crop_recommendation_service.dart';
+
 class WhyThisCropScreen extends StatelessWidget {
   const WhyThisCropScreen({
     super.key, 
@@ -18,6 +19,26 @@ class WhyThisCropScreen extends StatelessWidget {
   final AppState appState;
   final Map<String, dynamic> cropData;
   final Map<String, dynamic> contextData;
+
+  Future<void> _saveRecommendation(BuildContext context) async {
+    final service = CropRecommendationService();
+    final phoneNumber = appState.userData['phone'] ?? 'Unknown';
+    
+    final payload = {
+      'phone_number': phoneNumber,
+      'recommendations': [cropData], 
+      'location': appState.location,
+      'farmer_context': contextData,
+    };
+
+    final success = await service.saveRecommendation(payload);
+    
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(success ? 'Plan saved successfully!' : 'Failed to save plan.')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -188,7 +209,7 @@ class WhyThisCropScreen extends StatelessWidget {
                             const SizedBox(width: 16),
                             Expanded(
                               child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () => _saveRecommendation(context),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.primary,
                                   padding: const EdgeInsets.symmetric(vertical: 16),
@@ -304,8 +325,3 @@ class _TimelineItem extends StatelessWidget {
     );
   }
 }
-
-
-
-
-

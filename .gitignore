@@ -57,6 +57,9 @@ backend/test_response_*.json
 
 # Environment Variables
 .env
+.env.*
+**/.env
+**/.env.*
 *.env
 backend/.env
 backend/.env.example

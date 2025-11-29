@@ -107,4 +107,20 @@ class CropRecommendationService {
       return 'Could not generate explanation at this time.';
     }
   }
+
+
+  Future<bool> saveRecommendation(Map<String, dynamic> data) async {
+    final url = Uri.parse('$baseUrl/recommendations/save');
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(data),
+      );
+      return response.statusCode == 201;
+    } catch (e) {
+      print('Error saving recommendation: $e');
+      return false;
+    }
+  }
 }

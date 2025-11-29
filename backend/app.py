@@ -886,7 +886,40 @@ def get_explanation():
         logger.error(f"Error in get_explanation: {str(e)}")
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
+from db_service import db
 
+@app.route('/api/recommendations/save', methods=['POST'])
+def save_recommendation():
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'status': 'error', 'message': 'No data provided'}), 400
+            
+        # Validate required fields
+        required_fields = ['phone_number', 'recommendations', 'location', 'farmer_context']
+        for field in required_fields:
+            if field not in data:
+                return jsonify({'status': 'error', 'message': f'Missing field: {field}'}), 400
+        
+        result_id = db.save_recommendation(data)
+        
+        if result_id:
+            return jsonify({'status': 'success', 'id': result_id}), 201
+        else:
+            return jsonify({'status': 'error', 'message': 'Failed to save to database'}), 500
+            
+    except Exception as e:
+        logger.error(f"Error saving recommendation: {str(e)}")
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+@app.route('/api/recommendations/<phone_number>', methods=['GET'])
+def get_recommendation_history(phone_number):
+    try:
+        history = db.get_recommendations(phone_number)
+        return jsonify({'status': 'success', 'history': history}), 200
+    except Exception as e:
+        logger.error(f"Error fetching history: {str(e)}")
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 @app.errorhandler(404)
 def not_found(e):
     return jsonify({
