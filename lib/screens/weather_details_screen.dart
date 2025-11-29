@@ -31,6 +31,12 @@ class _WeatherDetailsScreenState extends State<WeatherDetailsScreen> {
       // Fallback if no location (though dashboard should have handled this)
       _weatherFuture = WeatherApiService().getWeatherByCoordinates(23.3441, 85.3096); // Default Ranchi
     }
+    
+    _weatherFuture.then((weather) {
+      if (mounted) {
+        widget.appState.updateWeather(weather);
+      }
+    });
   }
 
   String _formatTemp(num temp) => '${temp.round()}\u00B0C';

@@ -7,6 +7,8 @@ import '../widgets/app_footer.dart';
 import '../widgets/floating_ivr.dart';
 import 'package:farmaura/l10n/app_localizations.dart';
 import '../services/crop_recommendation_service.dart';
+import '../services/voice_assistant_service.dart';
+import '../utils/narration_templates.dart';
 
 class WhyThisCropScreen extends StatelessWidget {
   const WhyThisCropScreen({
@@ -68,6 +70,20 @@ class WhyThisCropScreen extends StatelessWidget {
                   showProfile: false,
                   appState: appState,
                   onBack: () => Navigator.of(context).pop(),
+                  trailing: IconButton(
+                    icon: const Icon(LucideIcons.volume2, color: AppColors.primaryDark),
+                    onPressed: () {
+                      final text = NarrationTemplates.getWhyThisCropSummary(
+                          cropName, 
+                          suitability, 
+                          ph, 
+                          temp, 
+                          rain, 
+                          market
+                      );
+                      VoiceAssistantService().speak(text, appState.userLanguage);
+                    },
+                  ),
                 ),
                 Expanded(
                   child: SingleChildScrollView(

@@ -1001,6 +1001,47 @@ def internal_error(e):
         'message': 'Internal server error'
     }), 500
 
+@app.route('/api/narrate', methods=['POST'])
+def narrate_content():
+    try:
+        data = request.get_json()
+        content = data.get('content')
+        context = data.get('context', {})
+        language = data.get('language', 'en')
+        
+        if not content:
+            return jsonify({'status': 'error', 'message': 'Missing content'}), 400
+
+        logger.info(f"Processing narration request in {language}")
+        
+        prompt = f"""You are a friendly agricultural assistant. 
+        Task: Rephrase the following information into a short, natural, spoken summary for a farmer.
+        Language: {language}
+        Tone: Friendly, encouraging, simple.
+        
+        Information to narrate:
+        {content}
+        
+        Keep it concise (2-3 sentences). Do not use markdown or bullet points. Just the spoken text.
+        """
+        
+        try:
+            response = gemini_model.generate_content(prompt)
+            narration = response.text.strip()
+        except Exception as e:
+            logger.error(f"Gemini generation failed: {e}")
+            narration = "Here is the information you requested."
+
+        return jsonify({
+            'status': 'success',
+            'narration': narration,
+            'language': language
+        }), 200
+
+    except Exception as e:
+        logger.error(f"Error in narration: {str(e)}")
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
 
 if __name__ == '__main__':
     try:

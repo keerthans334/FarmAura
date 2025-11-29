@@ -7,6 +7,8 @@ import '../widgets/app_footer.dart';
 import '../widgets/floating_ivr.dart';
 import 'why_this_crop_screen.dart';
 import '../services/crop_recommendation_service.dart';
+import '../services/voice_assistant_service.dart';
+import '../utils/narration_templates.dart';
 
 import 'package:farmaura/l10n/app_localizations.dart';
 
@@ -41,12 +43,6 @@ class _RecommendationResultsScreenState extends State<RecommendationResultsScree
     });
   }
 
-  @override
-  void dispose() {
-    widget.appState.updateContextText(null);
-    super.dispose();
-  }
-
   void _preloadExplanations() {
     for (var rec in widget.recommendations) {
       final cropName = rec['crop'];
@@ -59,6 +55,14 @@ class _RecommendationResultsScreenState extends State<RecommendationResultsScree
       );
     }
   }
+
+  @override
+  void dispose() {
+    widget.appState.updateContextText(null);
+    super.dispose();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -211,6 +215,18 @@ class _RecommendationCard extends StatelessWidget {
                   ],
                 ),
               ),
+              IconButton(
+                icon: const Icon(LucideIcons.volume2, color: AppColors.primary),
+                onPressed: () {
+                  final text = NarrationTemplates.getCropSummary(
+                    cropName,
+                    suitability,
+                    rec['expected_profit_inr']?.toStringAsFixed(0) ?? '0',
+                    yieldVal
+                  );
+                  VoiceAssistantService().speak(text, appState.userLanguage);
+                },
+              ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(
@@ -336,38 +352,11 @@ class _RecommendationCard extends StatelessWidget {
                   onPressed: () {
                      showDialog(
                        context: context,
-                       builder: (ctx) => AlertDialog(
-                         title: Text(rec['crop']),
-                         content: FutureBuilder<String>(
-                           future: explanationFuture,
-                           builder: (context, snapshot) {
-                             if (snapshot.connectionState == ConnectionState.waiting) {
-                               return const SizedBox(
-                                 height: 150,
-                                 child: Center(
-                                   child: Column(
-                                     mainAxisAlignment: MainAxisAlignment.center,
-                                     children: [
-                                       CircularProgressIndicator(),
-                                       SizedBox(height: 16),
-                                       Text("Generating AI explanation...", style: TextStyle(color: AppColors.muted)),
-                                     ],
-                                   ),
-                                 ),
-                               );
-                             }
-                             if (snapshot.hasError) {
-                               return Text('Error: ${snapshot.error}');
-                             }
-                             return SingleChildScrollView(
-                               child: Text(snapshot.data ?? 'No explanation available.'),
-                             );
-                           },
-                         ),
-                         actions: [
-                           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Close'))
-                         ],
-                       )
+                       builder: (ctx) => _ExplanationDialog(
+                         cropName: rec['crop'],
+                         explanationFuture: explanationFuture,
+                         appState: appState,
+                       ),
                      );
                   },
                   style: OutlinedButton.styleFrom(
@@ -420,6 +409,72 @@ class _StatBox extends StatelessWidget {
             Text(subLabel!, style: const TextStyle(color: AppColors.muted, fontSize: 10)),
         ],
       ),
+    );
+  }
+}
+
+class _ExplanationDialog extends StatelessWidget {
+  const _ExplanationDialog({
+    required this.cropName,
+    required this.explanationFuture,
+    required this.appState,
+  });
+
+  final String cropName;
+  final Future<String> explanationFuture;
+  final AppState appState;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<String>(
+      future: explanationFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return AlertDialog(
+            title: Text(cropName),
+            content: const SizedBox(
+              height: 150,
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(),
+                    SizedBox(height: 16),
+                    Text("Generating AI explanation...", style: TextStyle(color: AppColors.muted)),
+                  ],
+                ),
+              ),
+            ),
+            actions: [
+              TextButton(onPressed: () => Navigator.pop(context), child: const Text('Close'))
+            ],
+          );
+        }
+        
+        if (snapshot.hasError) {
+           return AlertDialog(
+            title: Text(cropName),
+            content: Text('Error: ${snapshot.error}'),
+            actions: [
+              TextButton(onPressed: () => Navigator.pop(context), child: const Text('Close'))
+            ],
+          );
+        }
+
+        final text = snapshot.data ?? 'No explanation available.';
+        
+        return AlertDialog(
+          title: Text(cropName),
+          content: SingleChildScrollView(child: Text(text)),
+          actions: [
+            IconButton(
+              icon: const Icon(LucideIcons.volume2, color: AppColors.primary),
+              onPressed: () => VoiceAssistantService().speak(text, appState.userLanguage),
+            ),
+            TextButton(onPressed: () => Navigator.pop(context), child: const Text('Close')),
+          ],
+        );
+      },
     );
   }
 }

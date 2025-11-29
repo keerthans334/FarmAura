@@ -14,6 +14,7 @@ class AppHeader extends StatefulWidget {
     this.showMenu = true,
     this.onBack,
     this.onMenuTap,
+    this.trailing,
     required this.appState,
   });
 
@@ -23,6 +24,7 @@ class AppHeader extends StatefulWidget {
   final bool showMenu;
   final VoidCallback? onBack;
   final VoidCallback? onMenuTap;
+  final Widget? trailing;
   final AppState appState;
 
   @override
@@ -106,7 +108,9 @@ class _AppHeaderState extends State<AppHeader> {
               ],
             ],
           ),
-          if (widget.showMenu)
+          if (widget.trailing != null)
+            widget.trailing!
+          else if (widget.showMenu)
             InkWell(
               onTap: _menuOpen ? null : _openMenu,
               borderRadius: BorderRadius.circular(20),
