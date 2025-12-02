@@ -5,10 +5,67 @@ import '../theme/app_theme.dart';
 import '../widgets/app_header.dart';
 import '../widgets/floating_ivr.dart';
 import 'package:farmaura/l10n/app_localizations.dart';
+import '../services/voice_assistant_service.dart';
+import '../services/disease_detection_service.dart';
+
+import 'dart:io';
 
 class PestResultScreen extends StatelessWidget {
-  const PestResultScreen({super.key, required this.appState});
+  PestResultScreen({
+    super.key,
+    required this.appState,
+    required this.scanResult,
+    required this.diagnosis,
+    required this.imagePath,
+  });
+
   final AppState appState;
+  final Map<String, dynamic> scanResult;
+  final Map<String, dynamic> diagnosis;
+  final String imagePath;
+  final VoiceAssistantService _voiceService = VoiceAssistantService();
+  final DiseaseDetectionService _diseaseService = DiseaseDetectionService();
+
+  Future<void> _speakReport(BuildContext context) async {
+    final langCode = appState.userLanguage == 'Hindi' ? 'hi' : (appState.userLanguage == 'Kannada' ? 'kn' : 'en');
+    
+    final text = '''
+    ${scanResult['disease_name']} Detected. Severity is ${scanResult['severity']}.
+    
+    Chemical Control: ${diagnosis['chemical_control'] ?? 'Not available'}.
+    
+    Biological Control: ${diagnosis['biological_control'] ?? 'Not available'}.
+    
+    Organic Alternative: ${diagnosis['organic_alternative'] ?? 'Not available'}.
+    ''';
+    
+    await _voiceService.speak(text, langCode, id: 'pest_report');
+  }
+
+  Future<void> _saveReport(BuildContext context) async {
+    final reportData = {
+      'phone_number': appState.userData['phone'] ?? 'unknown',
+      'disease_name': scanResult['disease_name'],
+      'severity': scanResult['severity'],
+      'confidence': scanResult['confidence'],
+      'diagnosis': diagnosis,
+      'image_path': imagePath, // Note: Local path, ideally should be uploaded URL
+      'timestamp': DateTime.now().toIso8601String(),
+    };
+
+    final success = await _diseaseService.saveReport(reportData);
+
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(success 
+            ? 'Report saved successfully' 
+            : 'Failed to save report'),
+          backgroundColor: success ? Colors.green : Colors.red,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +76,33 @@ class PestResultScreen extends StatelessWidget {
           children: [
             Column(
               children: [
-                AppHeader(title: AppLocalizations.of(context)!.pestDetection, showBack: true, showProfile: false, appState: appState, onBack: () => Navigator.of(context).pop()),
+                AppHeader(
+                  title: AppLocalizations.of(context)!.pestDetection, 
+                  showBack: true, 
+                  showProfile: false, 
+                  appState: appState, 
+                  onBack: () => Navigator.of(context).pop(),
+                  trailing: StreamBuilder<String?>(
+                    stream: _voiceService.playingIdStream,
+                    builder: (context, snapshot) {
+                      final myId = 'pest_report';
+                      final isPlaying = snapshot.data == myId;
+                      return IconButton(
+                        icon: Icon(
+                          isPlaying ? LucideIcons.volumeX : LucideIcons.volume2,
+                          color: isPlaying ? Colors.red : AppColors.primaryDark,
+                        ),
+                        onPressed: () {
+                          if (isPlaying) {
+                            _voiceService.stopSpeaking();
+                          } else {
+                            _speakReport(context);
+                          }
+                        },
+                      );
+                    },
+                  ),
+                ),
                 Expanded(
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 100),
@@ -32,8 +115,8 @@ class PestResultScreen extends StatelessWidget {
                           decoration: BoxDecoration(
                             color: Colors.grey.shade200,
                             borderRadius: BorderRadius.circular(24),
-                            image: const DecorationImage(
-                              image: NetworkImage('https://images.unsplash.com/photo-1599527676769-656910793693?w=800&auto=format&fit=crop&q=60'),
+                            image: DecorationImage(
+                              image: FileImage(File(imagePath)),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -56,8 +139,14 @@ class PestResultScreen extends StatelessWidget {
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text(AppLocalizations.of(context)!.leafBlightDetected, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.red)),
-                                        Text(AppLocalizations.of(context)!.severityHigh, style: const TextStyle(color: Colors.red)),
+                                        Text(
+                                          '${scanResult['disease_name']} Detected',
+                                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.red),
+                                        ),
+                                        Text(
+                                          'Severity: ${scanResult['severity'].toString().toUpperCase()} (${(scanResult['confidence'] * 100).toStringAsFixed(0)}%)',
+                                          style: const TextStyle(color: Colors.red),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -71,13 +160,13 @@ class PestResultScreen extends StatelessWidget {
                         const SizedBox(height: 16),
                         _ActionCard(
                           title: AppLocalizations.of(context)!.chemicalControl,
-                          description: 'Spray Mancozeb 75 WP @ 2g/liter of water. Repeat after 10-12 days if necessary.',
+                          description: diagnosis['chemical_control'] ?? 'No chemical control advice available.',
                           icon: LucideIcons.flaskConical,
                           color: Colors.orange,
                         ),
                         _ActionCard(
                           title: AppLocalizations.of(context)!.biologicalControl,
-                          description: 'Use Trichoderma viride @ 5g/liter for seed treatment before sowing.',
+                          description: diagnosis['biological_control'] ?? 'No biological control advice available.',
                           icon: LucideIcons.leaf,
                           color: Colors.green,
                         ),
@@ -101,7 +190,7 @@ class PestResultScreen extends StatelessWidget {
                                     Text(AppLocalizations.of(context)!.organicAlternativeTitle, style: const TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w700)),
                                     const SizedBox(height: 4),
                                     Text(
-                                      AppLocalizations.of(context)!.organicAlternativeDesc,
+                                      diagnosis['organic_alternative'] ?? 'No organic alternative available.',
                                       style: const TextStyle(color: AppColors.primaryDark, fontSize: 13, height: 1.4),
                                     ),
                                   ],
@@ -127,7 +216,7 @@ class PestResultScreen extends StatelessWidget {
                             const SizedBox(width: 16),
                             Expanded(
                               child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () => _saveReport(context),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.primary,
                                   padding: const EdgeInsets.symmetric(vertical: 16),

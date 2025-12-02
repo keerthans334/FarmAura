@@ -6,6 +6,8 @@ import '../theme/app_theme.dart';
 import '../widgets/app_header.dart';
 import '../widgets/floating_ivr.dart';
 import 'pest_result_screen.dart';
+import 'package:image_picker/image_picker.dart';
+import '../services/disease_detection_service.dart';
 import 'package:farmaura/l10n/app_localizations.dart';
 
 class PestDetectionScreen extends StatefulWidget {
@@ -17,12 +19,80 @@ class PestDetectionScreen extends StatefulWidget {
 }
 
 class _PestDetectionScreenState extends State<PestDetectionScreen> {
+  final ImagePicker _picker = ImagePicker();
+  final DiseaseDetectionService _service = DiseaseDetectionService();
+  bool _isLoading = false;
+
+  Future<void> _processImages(ImageSource source) async {
+    try {
+      final List<XFile> images;
+      if (source == ImageSource.camera) {
+        final image = await _picker.pickImage(source: source);
+        images = image != null ? [image] : [];
+      } else {
+        images = await _picker.pickMultiImage();
+      }
+
+      if (images.isEmpty) return;
+
+      setState(() => _isLoading = true);
+
+      // 1. Scan Disease
+      final scanResult = await _service.scanDisease(images);
+      final resultData = scanResult['result'];
+      final diseaseName = resultData['disease_name'];
+
+      // 2. Diagnose (Get Recommendations)
+      // Use context from AppState (location, etc.)
+      final contextData = {
+        'location': widget.appState.location,
+        'weather': widget.appState.weather?.toJson(),
+      };
+
+      final diagnosisResult = await _service.diagnoseDisease(
+        diseaseName,
+        'Unknown Crop', // Could ask user or infer
+        contextData,
+      );
+
+      if (!mounted) return;
+
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (_) => PestResultScreen(
+          appState: widget.appState,
+          scanResult: resultData,
+          diagnosis: diagnosisResult['diagnosis'],
+          imagePath: images.first.path,
+        ),
+      ));
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Stack(
           children: [
+            if (_isLoading)
+              const Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(color: AppColors.primary),
+                    SizedBox(height: 16),
+                    Text('Analyzing crop health...', style: TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.w600)),
+                  ],
+                ),
+              )
+            else
             Column(
               children: [
                 Padding(
@@ -89,10 +159,7 @@ class _PestDetectionScreenState extends State<PestDetectionScreen> {
                           icon: LucideIcons.camera,
                           label: AppLocalizations.of(context)!.openCamera,
                           color: AppColors.primary,
-                          onTap: () {
-                            // Simulate processing
-                            Navigator.of(context).push(MaterialPageRoute(builder: (_) => PestResultScreen(appState: widget.appState)));
-                          },
+                          onTap: () => _processImages(ImageSource.camera),
                         ),
                         const SizedBox(height: 16),
                         _actionButton(
@@ -100,9 +167,7 @@ class _PestDetectionScreenState extends State<PestDetectionScreen> {
                           label: AppLocalizations.of(context)!.uploadImage,
                           color: AppColors.accent,
                           isOutlined: true,
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(builder: (_) => PestResultScreen(appState: widget.appState)));
-                          },
+                          onTap: () => _processImages(ImageSource.gallery),
                         ),
                       ],
                     ),

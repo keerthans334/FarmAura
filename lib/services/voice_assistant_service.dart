@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:async';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:record/record.dart';
@@ -9,7 +10,16 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class VoiceAssistantService {
   static final VoiceAssistantService _instance = VoiceAssistantService._internal();
   factory VoiceAssistantService() => _instance;
-  VoiceAssistantService._internal();
+  final StreamController<String?> _playingIdController = StreamController<String?>.broadcast();
+  Stream<String?> get playingIdStream => _playingIdController.stream;
+  String? _currentPlayingId;
+
+  VoiceAssistantService._internal() {
+    _player.onPlayerComplete.listen((event) {
+      _currentPlayingId = null;
+      _playingIdController.add(null);
+    });
+  }
 
   final AudioRecorder _recorder = AudioRecorder();
   final AudioPlayer _player = AudioPlayer();
@@ -141,11 +151,66 @@ class VoiceAssistantService {
     }
   }
 
-  Future<void> speak(String text, String languageCode) async {
+  String prepareTtsSpeech(String text, String languageCode) {
+    // 1. Initial cleanup: Remove unwanted symbols but keep structure
+    // Allow: Alphanumeric (En, Hi, Kn), spaces, basic punctuation, and specific units/symbols
+    String processed = text.replaceAll(RegExp(r'[^a-zA-Z0-9\s.,!?:;()/%₹\-\u0900-\u097F\u0C80-\u0CFF]'), '');
+
+    // 2. Unit & Symbol Conversions
+    // N-P-K or NPK
+    processed = processed.replaceAll(RegExp(r'\bN-?P-?K\b', caseSensitive: false), 'N P K nutrients');
+    
+    // Grams (e.g. 500g)
+    processed = processed.replaceAllMapped(RegExp(r'(\d+)\s*g\b'), (match) => '${match.group(1)} grams');
+    
+    // Quintals per hectare
+    processed = processed.replaceAllMapped(RegExp(r'(\d+)\s*q/ha'), (match) => '${match.group(1)} quintals per hectare');
+    
+    // Currency and Percentage based on language
+    if (languageCode == 'hi') {
+      processed = processed.replaceAll('₹', ' रूपये ');
+      processed = processed.replaceAll('%', ' प्रतिशत ');
+    } else if (languageCode == 'kn') {
+      processed = processed.replaceAll('₹', ' ರೂಪಾಯಿ ');
+      processed = processed.replaceAll('%', ' ಪ್ರತಿಶತ ');
+    } else {
+      processed = processed.replaceAll('₹', ' rupees ');
+      processed = processed.replaceAll('%', ' percent ');
+    }
+
+    // 3. Add Natural Pauses (SSML)
+    // Colon -> Pause
+    processed = processed.replaceAll(':', '. <break time="300ms"/>');
+    
+    // Opening Bracket -> Pause
+    processed = processed.replaceAll('(', '<break time="250ms"/> (');
+    
+    // Comma -> Short Pause
+    processed = processed.replaceAll(',', ', <break time="150ms"/>');
+
+    // Newlines (Headings/Sections) -> Long Pause
+    processed = processed.replaceAll(RegExp(r'\n+'), ' <break time="500ms"/> ');
+
+    // 4. Final Normalization
+    // Normalize spaces (collapse multiple spaces into one)
+    processed = processed.replaceAll(RegExp(r'\s+'), ' ').trim();
+    
+    return processed;
+  }
+
+  Future<void> speak(String text, String languageCode, {String? id}) async {
     if (_azureKey.isEmpty) {
       print('❌ Error: Azure Speech Key is missing in .env');
       return;
     }
+
+    // If already playing this ID, stop it
+    if (id != null && _currentPlayingId == id) {
+      await stopSpeaking();
+      return;
+    }
+
+    final cleanText = prepareTtsSpeech(text, languageCode);
 
     final voiceName = _ttsVoices[languageCode] ?? 'en-IN-NeerjaNeural';
     final url = Uri.parse('https://$_azureRegion.tts.speech.microsoft.com/cognitiveservices/v1');
@@ -153,13 +218,13 @@ class VoiceAssistantService {
     final ssml = '''
 <speak version='1.0' xml:lang='$languageCode'>
     <voice xml:lang='$languageCode' xml:gender='Female' name='$voiceName'>
-        $text
+        $cleanText
     </voice>
 </speak>
 ''';
 
     try {
-      print('🔊 Sending TTS request for: "${text.length > 20 ? text.substring(0, 20) + '...' : text}"');
+      print('🔊 Sending TTS request for: "${cleanText.length > 20 ? cleanText.substring(0, 20) + '...' : cleanText}"');
       final response = await http.post(
         url,
         headers: {
@@ -174,6 +239,13 @@ class VoiceAssistantService {
       if (response.statusCode == 200) {
         final bytes = response.bodyBytes;
         print('✅ TTS Audio received (${bytes.length} bytes). Playing...');
+        
+        // Update state before playing
+        if (id != null) {
+          _currentPlayingId = id;
+          _playingIdController.add(id);
+        }
+        
         await _player.play(BytesSource(bytes));
       } else {
         print('❌ TTS Error: ${response.statusCode} - ${response.body}');
@@ -185,5 +257,7 @@ class VoiceAssistantService {
   
   Future<void> stopSpeaking() async {
     await _player.stop();
+    _currentPlayingId = null;
+    _playingIdController.add(null);
   }
 }

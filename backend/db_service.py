@@ -45,7 +45,8 @@ class DBService:
             container_defs = [
                 {'id': 'Users', 'partition_key': '/phoneNumber'},
                 {'id': 'Recommendations', 'partition_key': '/phoneNumber'},
-                {'id': 'SoilRecords', 'partition_key': '/phoneNumber'}
+                {'id': 'SoilRecords', 'partition_key': '/phoneNumber'},
+                {'id': 'DiseaseReports', 'partition_key': '/phoneNumber'}
             ]
             
             for c_def in container_defs:
@@ -127,6 +128,62 @@ class DBService:
         except Exception as e:
             logger.error(f"Failed to fetch recommendations: {str(e)}")
             return []
+
+    def save_disease_report(self, data):
+        if not self.is_connected():
+            return False
+            
+        try:
+            container = self.containers.get('DiseaseReports')
+            if not container:
+                return False
+                
+            item = {
+                'id': str(uuid.uuid4()),
+                'timestamp': datetime.now().isoformat(),
+                **data
+            }
+            
+            # Ensure phoneNumber
+            if 'phone_number' in data:
+                item['phoneNumber'] = data['phone_number']
+            elif 'phoneNumber' not in item:
+                logger.error("Missing phoneNumber in disease report")
+                return False
+                
+            container.create_item(body=item)
+            logger.info(f"✓ Disease report saved with ID: {item['id']}")
+            return item['id']
+            
+        except Exception as e:
+            logger.error(f"Failed to save disease report: {str(e)}")
+            return False
+
+    def get_latest_disease_report(self, phone_number):
+        if not self.is_connected():
+            return None
+            
+        try:
+            container = self.containers.get('DiseaseReports')
+            if not container:
+                return None
+                
+            query = "SELECT * FROM c WHERE c.phoneNumber = @phoneNumber ORDER BY c.timestamp DESC OFFSET 0 LIMIT 1"
+            params = [{"name": "@phoneNumber", "value": phone_number}]
+            
+            items = list(container.query_items(
+                query=query,
+                parameters=params,
+                enable_cross_partition_query=False
+            ))
+            
+            if items:
+                return items[0]
+            return None
+            
+        except Exception as e:
+            logger.error(f"Failed to fetch latest disease report: {str(e)}")
+            return None
 
 # Global instance
 db = DBService()

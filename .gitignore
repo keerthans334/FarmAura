@@ -70,4 +70,4 @@ backend/.env.example
 models/panIndia_JharkhandRich_crop_recommendation_300k.csv
 
 # Node modules
-node_modules/
+**/node_modules/

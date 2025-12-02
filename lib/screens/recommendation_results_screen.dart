@@ -215,16 +215,30 @@ class _RecommendationCard extends StatelessWidget {
                   ],
                 ),
               ),
-              IconButton(
-                icon: const Icon(LucideIcons.volume2, color: AppColors.primary),
-                onPressed: () {
-                  final text = NarrationTemplates.getCropSummary(
-                    cropName,
-                    suitability,
-                    rec['expected_profit_inr']?.toStringAsFixed(0) ?? '0',
-                    yieldVal
+              StreamBuilder<String?>(
+                stream: VoiceAssistantService().playingIdStream,
+                builder: (context, snapshot) {
+                  final myId = 'rec_card_$rank';
+                  final isPlaying = snapshot.data == myId;
+                  return IconButton(
+                    icon: Icon(
+                      isPlaying ? LucideIcons.volumeX : LucideIcons.volume2,
+                      color: isPlaying ? Colors.red : AppColors.primary,
+                    ),
+                    onPressed: () {
+                      if (isPlaying) {
+                        VoiceAssistantService().stopSpeaking();
+                      } else {
+                        final text = NarrationTemplates.getCropSummary(
+                          cropName,
+                          suitability,
+                          rec['expected_profit_inr']?.toStringAsFixed(0) ?? '0',
+                          yieldVal
+                        );
+                        VoiceAssistantService().speak(text, appState.userLanguage, id: myId);
+                      }
+                    },
                   );
-                  VoiceAssistantService().speak(text, appState.userLanguage);
                 },
               ),
               Container(
@@ -467,9 +481,25 @@ class _ExplanationDialog extends StatelessWidget {
           title: Text(cropName),
           content: SingleChildScrollView(child: Text(text)),
           actions: [
-            IconButton(
-              icon: const Icon(LucideIcons.volume2, color: AppColors.primary),
-              onPressed: () => VoiceAssistantService().speak(text, appState.userLanguage),
+            StreamBuilder<String?>(
+              stream: VoiceAssistantService().playingIdStream,
+              builder: (context, snapshot) {
+                final myId = 'explanation_$cropName';
+                final isPlaying = snapshot.data == myId;
+                return IconButton(
+                  icon: Icon(
+                    isPlaying ? LucideIcons.volumeX : LucideIcons.volume2,
+                    color: isPlaying ? Colors.red : AppColors.primary,
+                  ),
+                  onPressed: () {
+                    if (isPlaying) {
+                      VoiceAssistantService().stopSpeaking();
+                    } else {
+                      VoiceAssistantService().speak(text, appState.userLanguage, id: myId);
+                    }
+                  },
+                );
+              },
             ),
             TextButton(onPressed: () => Navigator.pop(context), child: const Text('Close')),
           ],

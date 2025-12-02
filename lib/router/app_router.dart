@@ -146,7 +146,18 @@ GoRouter createRouter(AppState appState) {
       ),
       GoRoute(
         path: '/pest-result',
-        builder: (context, state) => PestResultScreen(appState: appState),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          if (extra == null) {
+            return PestDetectionScreen(appState: appState);
+          }
+          return PestResultScreen(
+            appState: appState,
+            scanResult: extra['scanResult'],
+            diagnosis: extra['diagnosis'],
+            imagePath: extra['imagePath'],
+          );
+        },
       ),
       GoRoute(
         path: '/community',

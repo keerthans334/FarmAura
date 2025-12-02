@@ -120,6 +120,7 @@ class FloatingIVRState extends State<FloatingIVR> {
     if (isListening || isProcessing) return;
     
     try {
+      await _service.stopSpeaking();
       await _service.startListening();
       setState(() => isListening = true);
     } catch (e) {
@@ -185,16 +186,9 @@ class FloatingIVRState extends State<FloatingIVR> {
       // Save turn
       await _memoryService.saveTurn(query, response, langCode);
       
-      setState(() {
-        isProcessing = false;
-        isSpeaking = true;
-      });
+      setState(() => isProcessing = false);
 
-      await _service.speak(response, langCode);
-      
-      if (mounted) {
-        setState(() => isSpeaking = false);
-      }
+      await _service.speak(response, langCode, id: 'ivr_response');
       
     } catch (e) {
       setState(() => isProcessing = false);
@@ -380,22 +374,28 @@ class FloatingIVRState extends State<FloatingIVR> {
                         Expanded(
                           child: GestureDetector(
                             onTap: () => setState(() => isTyping = true),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                              decoration: BoxDecoration(
-                                color: AppColors.background,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    isListening ? 'Listening...' : (isSpeaking ? 'Speaking...' : 'Tap mic to speak'),
-                                    style: TextStyle(color: isListening ? Colors.red : AppColors.muted),
+                            child: StreamBuilder<String?>(
+                              stream: _service.playingIdStream,
+                              builder: (context, snapshot) {
+                                final isSpeakingNow = snapshot.data == 'ivr_response';
+                                return Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.background,
+                                    borderRadius: BorderRadius.circular(20),
                                   ),
-                                  const Icon(LucideIcons.keyboard, size: 18, color: AppColors.muted),
-                                ],
-                              ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        isListening ? 'Listening...' : (isSpeakingNow ? 'Speaking...' : 'Tap mic to speak'),
+                                        style: TextStyle(color: isListening ? Colors.red : (isSpeakingNow ? AppColors.primary : AppColors.muted)),
+                                      ),
+                                      const Icon(LucideIcons.keyboard, size: 18, color: AppColors.muted),
+                                    ],
+                                  ),
+                                );
+                              },
                             ),
                           ),
                         ),

@@ -29,6 +29,11 @@ from catboost import CatBoostClassifier
 import pickle
 from typing import Dict, List, Tuple, Optional
 import traceback
+import sys
+
+# Add root directory to path to import models
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from models.disease_model import disease_model
 
 # Load environment variables
 load_dotenv()
@@ -157,13 +162,26 @@ def initialize_resources():
         logger.info(f"✓ Gemini API initialized with model: {config.GEMINI_MODEL}")
         
         logger.info("=" * 60)
+        
+        # 6. Initialize Disease Model
+        try:
+            logger.info("Initializing Disease Detection Model...")
+            disease_model.model_path = os.path.join(config.MODELS_DIR, 'plant_scan.h5')
+            disease_model.load_model()
+            logger.info("✓ Disease Model initialized")
+        except Exception as e:
+            logger.error(f"Failed to load Disease Model: {e}")
+            logger.warning("Disease detection will use mock data.")
+
+        logger.info("=" * 60)
         logger.info("All resources initialized successfully!")
         logger.info("=" * 60)
         
     except Exception as e:
         logger.error(f"Failed to initialize resources: {str(e)}")
         logger.error(traceback.format_exc())
-        raise
+        # Don't raise, let server start with partial resources
+        # raise
 
 
 def normalize_crop_name(crop_name: str) -> str:
@@ -945,6 +963,11 @@ def process_voice_query():
         latest_reco = context.get('latest_crop_reco', {})
         memory = context.get('memory', [])
         
+        # Fetch latest disease report if phone number is available
+        latest_disease = {}
+        if farmer_profile.get('phone'):
+            latest_disease = db.get_latest_disease_report(farmer_profile['phone'])
+
         system_instruction = f"""You are a friendly agricultural assistant for an Indian farmer.
 Current Language: {language} (Reply in this language or English if requested).
 Farmer Name: {farmer_profile.get('name', 'Farmer')}
@@ -952,11 +975,12 @@ Location: {location.get('district', 'Unknown')}, {location.get('state', 'India')
 Current Screen: {screen_context}
 Weather: {json.dumps(weather)}
 Latest Crop Recommendation: {json.dumps(latest_reco)}
+Latest Disease Report: {json.dumps(latest_disease)}
 
 Task: Answer the farmer's question simply and clearly.
 - Keep it short (2-3 sentences max) for voice output.
 - Use simple words.
-- Use the provided context (Weather, Crop Reco) to give personalized advice.
+- Use the provided context (Weather, Crop Reco, Disease Report) to give personalized advice.
 - Maintain conversation continuity based on previous messages.
 """
 
@@ -1042,6 +1066,142 @@ def narrate_content():
         logger.error(f"Error in narration: {str(e)}")
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
+
+@app.route('/api/disease/scan', methods=['POST'])
+def scan_disease():
+    """
+    Analyze uploaded plant images to detect diseases.
+    Accepts multiple images, runs inference on each, and returns the highest confidence result.
+    """
+    try:
+        if 'images' not in request.files:
+            return jsonify({'status': 'error', 'message': 'No images provided'}), 400
+            
+        files = request.files.getlist('images')
+        if not files or files[0].filename == '':
+            return jsonify({'status': 'error', 'message': 'No selected file'}), 400
+
+        results = []
+        
+        for file in files:
+            try:
+                # Read file bytes
+                image_bytes = file.read()
+                # Run prediction
+                result = disease_model.predict(image_bytes)
+                results.append(result)
+            except Exception as e:
+                logger.error(f"Error processing image {file.filename}: {e}")
+                continue
+                
+        if not results:
+            return jsonify({'status': 'error', 'message': 'Failed to process any images'}), 500
+            
+        # Pick the result with highest confidence
+        best_result = max(results, key=lambda x: x['confidence'])
+        
+        logger.info(f"Disease Scan Result: {best_result['disease_name']} ({best_result['confidence']:.2%})")
+        
+        return jsonify({
+            'status': 'success',
+            'result': best_result,
+            'all_results': results
+        }), 200
+        
+    except Exception as e:
+        logger.error(f"Error in disease scan: {str(e)}")
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+
+@app.route('/api/disease/diagnose', methods=['POST'])
+def diagnose_disease():
+    """
+    Generate treatment recommendations using Gemini based on detected disease.
+    """
+    try:
+        data = request.get_json()
+        disease_name = data.get('disease_name')
+        crop_name = data.get('crop_name', 'Unknown Crop')
+        context = data.get('context', {}) # location, soil, etc.
+        
+        if not disease_name:
+            return jsonify({'status': 'error', 'message': 'Missing disease_name'}), 400
+            
+        logger.info(f"Generating diagnosis for {disease_name} on {crop_name}")
+        
+        prompt = f"""You are an expert plant pathologist and agriculture advisor.
+        
+        Task: Provide treatment recommendations for the following plant disease:
+        Disease: {disease_name}
+        Crop: {crop_name}
+        Context: {json.dumps(context)}
+        
+        Please provide recommendations in three distinct categories:
+        1. Chemical Control (Fungicides/Pesticides with dosage if known)
+        2. Biological Control (Biopesticides, natural enemies)
+        3. Organic Alternative (Home remedies, cultural practices)
+        
+        Format the output as a valid JSON object with these keys:
+        {{
+            "chemical_control": "...",
+            "biological_control": "...",
+            "organic_alternative": "..."
+        }}
+        
+        Keep the advice practical for an Indian farmer.
+        """
+        
+        try:
+            response = gemini_model.generate_content(prompt)
+            # Clean up response to ensure it's valid JSON
+            text = response.text.strip()
+            if text.startswith('```json'):
+                text = text[7:-3]
+            elif text.startswith('```'):
+                text = text[3:-3]
+                
+            diagnosis = json.loads(text)
+            
+        except Exception as e:
+            logger.error(f"Gemini diagnosis failed: {e}")
+            # Fallback
+            diagnosis = {
+                "chemical_control": "Consult local agriculture officer for specific chemical treatments.",
+                "biological_control": "Use Trichoderma viride or Pseudomonas fluorescens if available.",
+                "organic_alternative": "Remove infected parts and spray neem oil."
+            }
+            
+        return jsonify({
+            'status': 'success',
+            'diagnosis': diagnosis
+        }), 200
+        
+    except Exception as e:
+        logger.error(f"Error in diagnosis: {str(e)}")
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+
+@app.route('/api/disease/report/save', methods=['POST'])
+def save_disease_report():
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'status': 'error', 'message': 'No data provided'}), 400
+            
+        # Validate required fields
+        if 'phone_number' not in data:
+            return jsonify({'status': 'error', 'message': 'Missing phone_number'}), 400
+            
+        result_id = db.save_disease_report(data)
+        
+        if result_id:
+            return jsonify({'status': 'success', 'id': result_id}), 201
+        else:
+            return jsonify({'status': 'error', 'message': 'Failed to save to database'}), 500
+            
+    except Exception as e:
+        logger.error(f"Error saving disease report: {str(e)}")
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
 if __name__ == '__main__':
     try:

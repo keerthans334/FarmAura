@@ -70,18 +70,32 @@ class WhyThisCropScreen extends StatelessWidget {
                   showProfile: false,
                   appState: appState,
                   onBack: () => Navigator.of(context).pop(),
-                  trailing: IconButton(
-                    icon: const Icon(LucideIcons.volume2, color: AppColors.primaryDark),
-                    onPressed: () {
-                      final text = NarrationTemplates.getWhyThisCropSummary(
-                          cropName, 
-                          suitability, 
-                          ph, 
-                          temp, 
-                          rain, 
-                          market
+                  trailing: StreamBuilder<String?>(
+                    stream: VoiceAssistantService().playingIdStream,
+                    builder: (context, snapshot) {
+                      final myId = 'why_this_crop_$cropName';
+                      final isPlaying = snapshot.data == myId;
+                      return IconButton(
+                        icon: Icon(
+                          isPlaying ? LucideIcons.volumeX : LucideIcons.volume2,
+                          color: isPlaying ? Colors.red : AppColors.primaryDark,
+                        ),
+                        onPressed: () {
+                          if (isPlaying) {
+                            VoiceAssistantService().stopSpeaking();
+                          } else {
+                            final text = NarrationTemplates.getWhyThisCropSummary(
+                                cropName, 
+                                suitability, 
+                                ph, 
+                                temp, 
+                                rain, 
+                                market
+                            );
+                            VoiceAssistantService().speak(text, appState.userLanguage, id: myId);
+                          }
+                        },
                       );
-                      VoiceAssistantService().speak(text, appState.userLanguage);
                     },
                   ),
                 ),
