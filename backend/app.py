@@ -143,13 +143,15 @@ def initialize_resources():
         
         # 4. Load recommendation dataset
         if not os.path.exists(config.RECOMMENDATION_DATASET):
-            raise FileNotFoundError(
+            logger.warning(
                 f"Recommendation dataset not found: {config.RECOMMENDATION_DATASET}\n"
-                f"Please ensure panIndia_JharkhandRich_crop_recommendation_300k.csv is in the models/ directory."
+                f"Using generic fallback values for recommendations."
             )
-        logger.info(f"Loading recommendation dataset (this may take a moment)...")
-        recommendation_df = pd.read_csv(config.RECOMMENDATION_DATASET)
-        logger.info(f"✓ Recommendation dataset loaded: {len(recommendation_df)} rows")
+            recommendation_df = pd.DataFrame() # Empty DF
+        else:
+            logger.info(f"Loading recommendation dataset (this may take a moment)...")
+            recommendation_df = pd.read_csv(config.RECOMMENDATION_DATASET)
+            logger.info(f"✓ Recommendation dataset loaded: {len(recommendation_df)} rows")
         
         # 5. Initialize Gemini API
         if not config.GEMINI_API_KEY:

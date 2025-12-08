@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "586347718544",
+    "project_id": "farmaura-ad159",
+    "storage_bucket": "farmaura-ad159.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:586347718544:android:64d80910bf62092d7a7515",
+        "android_client_info": {
+          "package_name": "com.example.farmaura"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdbfulbvlIJeNpwHbZp9vZ-RIaSDt6MXU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

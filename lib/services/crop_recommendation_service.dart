@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class CropRecommendationService {
-  // Use machine's local IP address
-  static const String baseUrl = 'http://192.168.1.115:5001/api'; 
+  // Use 10.0.2.2 for Android Emulator to access host's localhost
+  static const String baseUrl = 'http://10.0.2.2:5001/api'; 
 
   Future<Map<String, dynamic>> autoFillParameters({
     required String state,

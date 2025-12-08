@@ -27,7 +27,8 @@ class VoiceAssistantService {
   static const Duration _debounceTime = Duration(seconds: 1);
   
   // Backend URL (Emulator)
-  static const String _backendUrl = 'http://192.168.1.115:5001/api/voice-query';
+  // Backend URL (Emulator)
+  static const String _backendUrl = 'http://10.0.2.2:5001/api/voice-query';
 
   // Azure Config
   String get _azureKey => dotenv.env['AZURE_SPEECH_KEY'] ?? '';
