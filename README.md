@@ -56,9 +56,9 @@ The result is a comprehensive advisory system that tells farmers **what to grow*
 
 | **Home Dashboard** | **Crop Recommendations** | **Pest Detection** |
 |:---:|:---:|:---:|
-| <img src="assets/images/dashboard_preview.png" alt="Home" height="400"> | <img src="assets/images/recommendation_preview.png" alt="Recs" height="400"> | <img src="assets/images/pest_preview.png" alt="Pest" height="400"> |
+| <img src="assets/images/dashboard.jpeg" alt="Home" height="400"> | <img src="assets/images/recommendation_preview.png" alt="Recs" height="400"> | <img src="assets/images/pest_preview.png" alt="Pest" height="400"> |
 
-> *Note: Add your screenshots to the `assets/images/` folder with the names above, or update the paths.*
+
 
 ---
 
