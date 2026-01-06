@@ -68,3 +68,4 @@ backend/.env.example
 
 # Large Datasets
 models/panIndia_JharkhandRich_crop_recommendation_300k.csv
+models/expanded_synthetic_crop_dataset_300k.csv
