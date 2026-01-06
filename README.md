@@ -54,9 +54,10 @@ The result is a comprehensive advisory system that tells farmers **what to grow*
 
 ## 📱 User Interface
 
-| **Home Dashboard** | **Crop Recommendations** | **Pest Detection** |
-|:---:|:---:|:---:|
-| <img src="assets/images/dashboard.jpeg" alt="Home" height="400"> | <img src="assets/images/recommendation_preview.png" alt="Recs" height="400"> | <img src="assets/images/pest_preview.png" alt="Pest" height="400"> |
+| **Home Dashboard** | **Crop Recommendations** | **Pest Detection** | **APP Icon** | **Community** | **Finance** |**videos section** | **Dashboard in Kannada** | **IVR** |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| <img src="assets/images/dashboard.jpeg" alt="Home" height="400"> | <img src="assets/images/crop_advisory.jpeg" alt="Recs" height="400"> | <img src="assets/images/pest_detection.jpeg" alt="Pest" height="400"> | <img src="assets/images/app_icon.png" alt="Home" height="400"> | <img src="assets/images/community.jpeg" alt="Recs" height="400"> | <img src="assets/images/finanace.jpeg" alt="Pest" height="400"> | <img src="assets/images/video.jpeg" alt="Home" height="400"> | <img src="assets/images/dashboard_kannada.jpeg" alt="Recs" height="400"> | <img src="assets/images/ivr.jpeg" alt="Pest" height="400"> |
+
 
 
 
