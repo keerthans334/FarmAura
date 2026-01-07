@@ -68,7 +68,7 @@ The result is a comprehensive advisory system that tells farmers **what to grow*
 
 Here is a short demonstration of the CampusCare app in action:
 
-[![Watch the video](https://img.youtube.com/vi/TMW2U3cn1k4/maxresdefault.jpg)](https://youtu.be/weXpkhFjh4E)
+[![Watch the video](https://img.youtube.com/vi/weXpkhFjh4E/maxresdefault.jpg)](https://youtu.be/weXpkhFjh4E)
 
 *(Note: Click the image above to watch the demo on YouTube)*
 
